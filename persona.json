@@ -1,13 +1,1 @@
-<<<<<<< HEAD
-[ {
-  "id_persona" : "123454",
-  "nombre_apellido_persona" : "JUAN IVAN",
-  "empleado_jefe" : "ROJAS"
-}, {
-  "id_persona" : "123212",
-  "nombre_apellido_persona" : "ESTEBAN DAVID",
-  "empleado_jefe" : "PUENTES"
-} ]
-=======
 [ ]
->>>>>>> 4c5ed9dc11e5f708e8c3952338ad4093a7f59c21

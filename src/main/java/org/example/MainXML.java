@@ -913,9 +913,18 @@ public class MainXML {
                 // Mostrar la lista de empleados registrados con índices
                 for (int i = 0; i < employeeList.size(); i++) {
                     Employee empleado = employeeList.get(i);
-                    System.out.println("Índice: " + i);
+                    System.out.println("Empleado :");
                     System.out.println("Cargo: " + empleado.getTypeJob());
-                    System.out.println("Nombre del empleado: " + empleado.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+
+                    List<Person> personasAsociadas = empleado.getLista_personas_cargo();
+                    System.out.println("Personas asociadas al cargo:");
+                    for (int j = 0; j < personasAsociadas.size(); j++) {
+                        Person persona = personasAsociadas.get(j);
+                        System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
+                        System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
+                        System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+                    }
+
                     System.out.println();
                 }
 
@@ -925,7 +934,7 @@ public class MainXML {
                 }
 
                 System.out.print("Ingrese el índice del empleado que desea modificar: ");
-                int indiceSeleccionado = leerIndicePersona();
+                int indiceSeleccionado = leerIndiceEmployee();
 
                 // Verificar que el índice esté dentro del rango válido
                 if (indiceSeleccionado >= 0 && indiceSeleccionado < employeeList.size()) {
@@ -1222,8 +1231,20 @@ public class MainXML {
                     }
                 }
             }
+    private static int leerIndiceEmployee () {
+        while (true) {
+            try {
+                String input = reader.readLine();
+                int indice = Integer.parseInt(input.trim());
+                return indice;
+            } catch (NumberFormatException | IOException e) {
+                System.out.print("Ingrese un índice válido: ");
+            }
+        }
+    }
 
-            private static void guardarPersonasEnArchivo_xml () {
+
+    private static void guardarPersonasEnArchivo_xml () {
                 try {
 // Configuración para crear un documento XML
                     DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

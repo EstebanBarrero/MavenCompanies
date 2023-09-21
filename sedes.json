@@ -1,15 +1,1 @@
-<<<<<<< HEAD
 [ ]
-=======
-[ {
-  "nombre_sede" : "SUR",
-  "codigo_sede" : "02",
-  "sede_principal" : "N",
-  "lista_empleados_sede" : [ ]
-}, {
-  "nombre_sede" : "NORTE",
-  "codigo_sede" : "05",
-  "sede_principal" : "N",
-  "lista_empleados_sede" : [ ]
-} ]
->>>>>>> 4c5ed9dc11e5f708e8c3952338ad4093a7f59c21

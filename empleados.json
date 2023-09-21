@@ -1,4 +1,3 @@
-
 [ {
   "cargo" : "ASISTENCIAL",
   "lista_personas_cargo" : [ {
@@ -11,5 +10,3 @@
     "empleado_jefe" : "PUENTES"
   } ]
 } ]
-
-
