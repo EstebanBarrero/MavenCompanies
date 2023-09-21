@@ -1,52 +1,56 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package models;
 
-/**
- *
- * @author USUARIO
- */
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Person {
-        private String id_person;
-    private String fistName;
-    private String lastName;
 
-    public Person(String id_person, String fistName, String lastName) {
-        this.id_person = id_person;
-        this.fistName = fistName;
-        this.lastName = lastName;
+    @JsonProperty("id_persona")
+    String id_persona;
+    @JsonProperty("nombre_apellido_persona")
+    String nombre_apellido_persona;
+    @JsonProperty("empleado_jefe")
+    private String empleado_jefe;
+
+    //constructor vacío
+    public Person() {
     }
 
-    public String getId_person() {
-        return id_person;
+    public Person(String id_persona, String nombre_apellido_persona, String empleado_jefe) {
+        this.id_persona = id_persona;
+        this.nombre_apellido_persona = nombre_apellido_persona;
+        this.empleado_jefe = empleado_jefe;
     }
 
-    public void setId_person(String id_person) {
-        this.id_person = id_person;
+    public String getId_persona() {
+        return id_persona;
     }
 
-    public String getFistName() {
-        return fistName;
+    public void setId_persona(String id_persona) {
+        this.id_persona = id_persona;
     }
 
-    public void setFistName(String fistName) {
-        this.fistName = fistName;
+    public String getNombre_apellido_persona() {
+        return nombre_apellido_persona;
     }
 
-    public String getLastName() {
-        return lastName;
+    public void setNombre_apellido_persona(String nombre_apellido_persona) {
+        this.nombre_apellido_persona = nombre_apellido_persona;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public String getEmpleado_jefe() {
+        return empleado_jefe;
     }
+
+    public void setEmpleado_jefe(String empleado_jefe) {
+        this.empleado_jefe = empleado_jefe;
+    }
+
+
 
     @Override
     public String toString() {
-        return "Id_persona: " + id_person +
-                ", Nombre: " + fistName +
-                ", Apellido: " + lastName;
+        return "Id Persona: " + id_persona
+                + ", Nombres y Apellidos Persona: " + nombre_apellido_persona
+                + ", Empleado jefe (S/N): " + empleado_jefe;
     }
 }

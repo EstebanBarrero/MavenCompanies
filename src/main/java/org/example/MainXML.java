@@ -54,19 +54,13 @@ public class MainXML {
             opcion = leerOpcion();
 
             switch (opcion) {
-                case 1 ->
-                        ver_personas_registradas(); //Ver personas registradas
-                case 2 ->
-                        registrar_Persona();  //Registrar_Persona
-                case 3 ->
-                        modificar_Persona();//Modificar_Persona
-                case 4 ->
-                        eliminar_Persona(); //Eliminar_Persona
+                case 1 -> ver_personas_registradas(); //Ver personas registradas
+                case 2 -> registrar_Persona();  //Registrar_Persona
+                case 3 -> modificar_Persona();//Modificar_Persona
+                case 4 -> eliminar_Persona(); //Eliminar_Persona
 
-                case 0 ->
-                        System.out.println("¡Hasta luego!");
-                default ->
-                        System.out.println("Opción no válida. Intente nuevamente.");
+                case 0 -> System.out.println("¡Hasta luego!");
+                default -> System.out.println("Opción no válida. Intente nuevamente.");
             }
 
         } while (opcion != 0);
@@ -77,6 +71,7 @@ public class MainXML {
     }
 
     ////////////////////
+
     /**
      * Carga y muestra el menú de opciones desde un archivo XML. El método lee
      * el archivo "menu.xml", analiza su contenido y muestra las opciones en la
@@ -136,13 +131,8 @@ public class MainXML {
                 for (Person persona : personasCargadas) {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
-<<<<<<< HEAD
-                    for (Person person : personas) {
-                        if (person.getId_person().equals(persona.getId_person())) {
-=======
                     for (Person d : personas) {
-                        if (d.getId_person().equals(persona.getId_person())) {
->>>>>>> 9213894b337d794404357748b8458911b891e431
+                        if (d.getId_persona().equals(persona.getId_persona())) {
                             existe = true;
                             break;
                         }
@@ -160,6 +150,7 @@ public class MainXML {
         }
     }
 
+
     /*private static void mostrarMenu() {                         // mostrar opciones menú
         System.out.println("=== MENÚ - REGISTRO DE PERSONAS EN/ES===");
         System.out.println("1. Ver personas registradas");
@@ -168,139 +159,139 @@ public class MainXML {
         System.out.println("4. Eliminar Persona");
         System.out.println("0. Salir");
     }*/
-    private static int leerOpcion() {
-        int opcion;
-        while (true) {
-            try {
-                System.out.print("Ingrese una opción: ");
-                String input = reader.readLine().trim();
-                if (!input.isEmpty()) {
-                    opcion = Integer.parseInt(input);
-                    if (opcion >= 0 && opcion <= 4) {
-                        break;
-                    } else {
-                        System.out.println("Opción no válida. Intente nuevamente.");
+            private static int leerOpcion () {
+                int opcion;
+                while (true) {
+                    try {
+                        System.out.print("Ingrese una opción: ");
+                        String input = reader.readLine().trim();
+                        if (!input.isEmpty()) {
+                            opcion = Integer.parseInt(input);
+                            if (opcion >= 0 && opcion <= 4) {
+                                break;
+                            } else {
+                                System.out.println("Opción no válida. Intente nuevamente.");
+                            }
+                        } else {
+                            System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+                        }
+                    } catch (NumberFormatException | IOException e) {
+                        System.out.println("Error: Ingrese un número válido.");
                     }
+                }
+                return opcion;
+            }
+
+            private static String leerCodigoNumerico () {
+                String input;
+                while (true) {
+                    try {
+                        input = reader.readLine().trim();
+                        if (!input.isEmpty() && input.matches("^[0-9]+$")) { // Verifica que la entrada contenga solo números
+                            return input;
+                        }
+                        System.out.println("Ingrese un valor válido (solo números). Intente nuevamente.");
+                    } catch (IOException e) {
+                        System.out.println("Error al leer la entrada.");
+                    }
+                }
+            }
+
+            private static int leerIndiceValido ( int maximo){
+                int indice;
+                while (true) {
+                    try {
+                        System.out.print("Ingrese un índice válido: ");
+                        String input = reader.readLine().trim();
+                        indice = Integer.parseInt(input);
+                        if (indice >= 0 && indice < maximo) {
+                            break;
+                        }
+                        System.out.println("Índice no válido. Intente nuevamente.");
+                    } catch (NumberFormatException | IOException e) {
+                        System.out.println("Error: Ingrese un número válido.");
+                    }
+                }
+                return indice;
+            }
+
+            private static String leerCadenaNoVaciaTexto () {
+                String input;
+                while (true) {
+                    try {
+                        input = reader.readLine().trim();
+                        if (!input.isEmpty() && input.matches("^[a-zA-Z\\s]+$")) {
+                            return input;
+                        }
+                        System.out.println("Ingrese un valor válido (solo texto). Intente nuevamente.");
+                    } catch (IOException e) {
+                        System.out.println("Error al leer la entrada.");
+                    }
+                }
+            }
+
+            private static void registrar_Persona () {
+                System.out.println("=== Registrar Persona ===");
+
+                // Declaración de variables para almacenar los datos de la persona
+                String nombre_persona = null;
+                String apellido_persona = null;
+                String id_persona = null;
+
+                // Ciclo para validar y registrar los datos de la persona
+                while (true) {
+                    if (nombre_persona == null && apellido_persona == null) {
+                        System.out.print("Nombre persona: ");
+                        nombre_persona = leerCadenaNoVaciaTexto().toUpperCase();
+                        System.out.print("Apellido persona: ");
+                        apellido_persona = leerCadenaNoVaciaTexto().toUpperCase();
+                    } else if (id_persona == null) {
+                        System.out.print("Número identificación persona: ");
+                        id_persona = leerCodigoNumerico();
+
+                        // Validar si la persona ya está registrada por id
+                        boolean idRepetido = false;
+                        for (Person persona : personas) {
+                            if (persona.getId_persona().equals(id_persona)) {
+                                System.out.println("La persona con este id ya está registrada.");
+                                id_persona = null; // Reiniciar para volver a pedir el dato
+                                idRepetido = true;
+                                break;
+                            }
+                        }
+
+                        if (idRepetido) {
+                            continue; // Volver al inicio del ciclo si el id está repetido
+                        }
+                    }
+
+                    // Si se han ingresado todos los datos requeridos, registrar la persona
+                    if (nombre_persona != null && apellido_persona != null && id_persona != null) {
+                        personas.add(new Person(id_persona, nombre_persona, apellido_persona));
+                        System.out.println("Persona registrada exitosamente.");
+
+                        // Llamar a la función para guardar las personas en un archivo JSON
+                        guardarPersonasEnArchivo_json();
+                        guardarPersonasEnArchivo_xml();
+                        break; // Salir del bucle en caso de éxito
+                    }
+                }
+            }
+
+            private static void ver_personas_registradas () {
+                System.out.println("=== Personas Registradas ===");
+
+                // Verificar si hay personas registradas
+                if (personas.isEmpty()) {
+                    System.out.println("No hay personas registradas.");
                 } else {
-                    System.out.println("No se permiten campos vacíos. Intente nuevamente.");
-                }
-            } catch (NumberFormatException | IOException e) {
-                System.out.println("Error: Ingrese un número válido.");
-            }
-        }
-        return opcion;
-    }
-
-    private static String leerCodigoNumerico() {
-        String input;
-        while (true) {
-            try {
-                input = reader.readLine().trim();
-                if (!input.isEmpty() && input.matches("^[0-9]+$")) { // Verifica que la entrada contenga solo números
-                    return input;
-                }
-                System.out.println("Ingrese un valor válido (solo números). Intente nuevamente.");
-            } catch (IOException e) {
-                System.out.println("Error al leer la entrada.");
-            }
-        }
-    }
-
-    private static int leerIndiceValido(int maximo) {
-        int indice;
-        while (true) {
-            try {
-                System.out.print("Ingrese un índice válido: ");
-                String input = reader.readLine().trim();
-                indice = Integer.parseInt(input);
-                if (indice >= 0 && indice < maximo) {
-                    break;
-                }
-                System.out.println("Índice no válido. Intente nuevamente.");
-            } catch (NumberFormatException | IOException e) {
-                System.out.println("Error: Ingrese un número válido.");
-            }
-        }
-        return indice;
-    }
-
-    private static String leerCadenaNoVaciaTexto() {
-        String input;
-        while (true) {
-            try {
-                input = reader.readLine().trim();
-                if (!input.isEmpty() && input.matches("^[a-zA-Z\\s]+$")) {
-                    return input;
-                }
-                System.out.println("Ingrese un valor válido (solo texto). Intente nuevamente.");
-            } catch (IOException e) {
-                System.out.println("Error al leer la entrada.");
-            }
-        }
-    }
-
-    private static void registrar_Persona() {
-        System.out.println("=== Registrar Persona ===");
-
-        // Declaración de variables para almacenar los datos de la persona
-        String nombre_persona = null;
-        String apellido_persona = null;
-        String id_persona = null;
-
-        // Ciclo para validar y registrar los datos de la persona
-        while (true) {
-            if (nombre_persona == null && apellido_persona == null) {
-                System.out.print("Nombre persona: ");
-                nombre_persona = leerCadenaNoVaciaTexto().toUpperCase();
-                System.out.print("Apellido persona: ");
-                apellido_persona = leerCadenaNoVaciaTexto().toUpperCase();
-            } else if (id_persona == null) {
-                System.out.print("Número identificación persona: ");
-                id_persona = leerCodigoNumerico();
-
-                // Validar si la persona ya está registrada por id
-                boolean idRepetido = false;
-                for (Person persona : personas) {
-                    if (persona.getId_person().equals(id_persona)) {
-                        System.out.println("La persona con este id ya está registrada.");
-                        id_persona = null; // Reiniciar para volver a pedir el dato
-                        idRepetido = true;
-                        break;
+                    int index = 0;
+                    for (Person persona : personas) {
+                        System.out.println("Índice " + index + ": " + persona);
+                        index++;
                     }
                 }
-
-                if (idRepetido) {
-                    continue; // Volver al inicio del ciclo si el id está repetido
-                }
             }
-
-            // Si se han ingresado todos los datos requeridos, registrar la persona
-            if (nombre_persona != null && apellido_persona != null && id_persona != null) {
-                personas.add(new Person(id_persona, nombre_persona, apellido_persona));
-                System.out.println("Persona registrada exitosamente.");
-
-                // Llamar a la función para guardar las personas en un archivo JSON
-                guardarPersonasEnArchivo_json();
-                guardarPersonasEnArchivo_xml();
-                break; // Salir del bucle en caso de éxito
-            }
-        }
-    }
-
-    private static void ver_personas_registradas() {
-        System.out.println("=== Personas Registradas ===");
-
-        // Verificar si hay personas registradas
-        if (personas.isEmpty()) {
-            System.out.println("No hay personas registradas.");
-        } else {
-            int index = 0;
-            for (Person persona : personas) {
-                System.out.println("Índice " + index + ": " + persona);
-                index++;
-            }
-        }
-    }
 
     private static void modificar_Persona() {
         System.out.println("=== Modificar Persona ===");
@@ -309,14 +300,8 @@ public class MainXML {
         for (int i = 0; i < personas.size(); i++) {
             Person persona = personas.get(i);
             System.out.println("Índice: " + i);
-            System.out.println("ID: " + persona.getId_person());
-<<<<<<< HEAD
-            System.out.println("Nombre: " + persona.getLastName());
-            System.out.println("Apellido: " + persona.getFistName());
-=======
-            System.out.println("Nombre: " + persona.getFistName());
-            System.out.println("Apellido: " + persona.getLastName());
->>>>>>> 9213894b337d794404357748b8458911b891e431
+            System.out.println("ID: " + persona.getId_persona());
+            System.out.println("Nombre: " + persona.getNombre_apellido_persona());
             System.out.println();
         }
 
@@ -333,20 +318,13 @@ public class MainXML {
             Person personaAModificar = personas.get(indiceSeleccionado);
 
             System.out.println("Persona seleccionada:");
-            System.out.println("ID: " + personaAModificar.getId_person());
-            System.out.println("Nombre actual: " + personaAModificar.getFistName());
-            System.out.println("Apellido actual: " + personaAModificar.getLastName());
+            System.out.println("ID: " + personaAModificar.getId_persona());
+            System.out.println("Nombre actual: " + personaAModificar.getNombre_apellido_persona());
 
             System.out.print("Nuevo nombre: ");
             String nuevoNombre = leerCadenaNoVaciaTexto();
             if (!nuevoNombre.isEmpty()) {
-                personaAModificar.setFistName(nuevoNombre.toUpperCase());
-            }
-
-            System.out.print("Nuevo apellido: ");
-            String nuevoApellido = leerCadenaNoVaciaTexto();
-            if (!nuevoApellido.isEmpty()) {
-                personaAModificar.setLastName(nuevoApellido.toUpperCase());
+                personaAModificar.setNombre_apellido_persona(nuevoNombre.toUpperCase());
             }
 
             System.out.println("Persona modificada exitosamente.");
@@ -359,80 +337,82 @@ public class MainXML {
         }
     }
 
-    private static void eliminar_Persona() {
-        System.out.println("=== Eliminar Registro de personas ===");
-        if (personas.isEmpty()) {
-            System.out.println("No hay personas registradas.");
-            return;
-        }
-        ver_personas_registradas();
-        System.out.print("Ingrese el índice de la persona que desea eliminar: ");
-        int indice = leerIndiceValido(personas.size());
-        personas.remove(indice);
-        System.out.println("persona eliminada exitosamente.");
-        guardarPersonasEnArchivo_json();
-        guardarPersonasEnArchivo_xml();
-    }
-
-    private static int leerIndicePersona() {
-
-        while (true) {
-            try {
-                String input = reader.readLine();
-                int indice = Integer.parseInt(input.trim());
-                return indice;
-            } catch (NumberFormatException | IOException e) {
-                System.out.print("Ingrese un índice válido: ");
+            private static void eliminar_Persona () {
+                System.out.println("=== Eliminar Registro de personas ===");
+                if (personas.isEmpty()) {
+                    System.out.println("No hay personas registradas.");
+                    return;
+                }
+                ver_personas_registradas();
+                System.out.print("Ingrese el índice de la persona que desea eliminar: ");
+                int indice = leerIndiceValido(personas.size());
+                personas.remove(indice);
+                System.out.println("persona eliminada exitosamente.");
+                guardarPersonasEnArchivo_json();
+                guardarPersonasEnArchivo_xml();
             }
-        }
-    }
 
-    private static void guardarPersonasEnArchivo_xml() {
-        try {
+            private static int leerIndicePersona () {
+
+                while (true) {
+                    try {
+                        String input = reader.readLine();
+                        int indice = Integer.parseInt(input.trim());
+                        return indice;
+                    } catch (NumberFormatException | IOException e) {
+                        System.out.print("Ingrese un índice válido: ");
+                    }
+                }
+            }
+
+            private static void guardarPersonasEnArchivo_xml () {
+                try {
 // Configuración para crear un documento XML
-            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+                    DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 
-            // Crear un documento XML
-            Document doc = dBuilder.newDocument();
-            Element rootElement = doc.createElement("Personas");
-            doc.appendChild(rootElement);
+                    // Crear un documento XML
+                    Document doc = dBuilder.newDocument();
+                    Element rootElement = doc.createElement("Personas");
+                    doc.appendChild(rootElement);
 
 // Agregar cada persona como un elemento al documento
-            for (Person persona : personas) {
-                Element personaElement = doc.createElement("Persona");
-                rootElement.appendChild(personaElement);
+                    for (Person persona : personas) {
+                        Element personaElement = doc.createElement("Persona");
+                        rootElement.appendChild(personaElement);
 
 // Crear elementos para ID, Nombre y Apellido de la persona
-                Element idElement = doc.createElement("ID");
-                idElement.appendChild(doc.createTextNode(persona.getId_person()));
-                personaElement.appendChild(idElement);
+                        Element idElement = doc.createElement("ID");
+                        idElement.appendChild(doc.createTextNode(persona.getId_persona()));
+                        personaElement.appendChild(idElement);
 
-                Element nombreElement = doc.createElement("Nombre");
-                nombreElement.appendChild(doc.createTextNode(persona.getFistName()));
-                personaElement.appendChild(nombreElement);
+                        Element nombreElement = doc.createElement("Nombre");
+                        nombreElement.appendChild(doc.createTextNode(persona.getNombre_apellido_persona()));
+                        personaElement.appendChild(nombreElement);
 
-                Element apellidoElement = doc.createElement("Apellido");
-                apellidoElement.appendChild(doc.createTextNode(persona.getLastName()));
-                personaElement.appendChild(apellidoElement);
-            }
+                        /*Element apellidoElement = doc.createElement("Apellido");
+                        apellidoElement.appendChild(doc.createTextNode(persona.getLastName()));
+                        personaElement.appendChild(apellidoElement);*/
+                    }
 
 // Configurar la salida con formato (saltos de línea y sangría)
-            TransformerFactory transformerFactory = TransformerFactory.newInstance();
-            Transformer transformer = transformerFactory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 
 // Especificar la fuente de datos (el documento creado) y el destino (archivo XML)
-            DOMSource source = new DOMSource(doc);
-            StreamResult result = new StreamResult(new FileWriter("personas.xml"));
+                    DOMSource source = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new FileWriter("personas.xml"));
 
 // Realizar la transformación para guardar el documento en el archivo XML
-            transformer.transform(source, result);
-            System.out.println("Datos de persona guardados en el archivo XML con formato.");
+                    transformer.transform(source, result);
+                    System.out.println("Datos de persona guardados en el archivo XML con formato.");
 
-        } catch (IOException | ParserConfigurationException | TransformerException | DOMException e) {
-            System.out.println("Error al guardar los datos de persona en el archivo XML.");
-        }
-    }
+                } catch (IOException | ParserConfigurationException | TransformerException | DOMException e) {
+                    System.out.println("Error al guardar los datos de persona en el archivo XML.");
+                }
+            }
 
 }
+
+

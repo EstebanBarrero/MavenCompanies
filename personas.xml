@@ -1,13 +1,2 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Personas>
-    <Persona>
-        <ID>1002329058</ID>
-        <Nombre>DAVID</Nombre>
-        <Apellido>PUENTES</Apellido>
-    </Persona>
-    <Persona>
-        <ID>10023290586</ID>
-        <Nombre>ESTEBAN</Nombre>
-        <Apellido>BARRERO</Apellido>
-    </Persona>
-</Personas>
+<Personas/>
