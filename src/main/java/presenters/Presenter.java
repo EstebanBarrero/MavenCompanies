@@ -4,15 +4,30 @@
  */
 package presenters;
 
+<<<<<<< HEAD
 import enums.TypeJob;
 import models.*;
 import views.View;
 
+=======
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import enums.TypeJob;
+>>>>>>> 9213894b337d794404357748b8458911b891e431
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import models.Campus;
+import models.Company;
+import models.Employee;
+import models.JobTitle;
+import models.Person;
+import views.View;
 
 /**
  *
@@ -114,7 +129,55 @@ public class Presenter {
             }
         } while (opcionMainMenu != 0);
     }
+    
+     private static void cargarPersonasDesdeArchivo_json() {
+        personList.clear(); // Limpiamos la lista actual antes de cargar los datos.
 
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("persona.json");
+
+            if (Files.exists(filePath)) {
+                List<Person> personasCargadas = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Person>>() {
+                });
+                // Iteramos sobre las personas cargadas y añadimos cada uno a la lista de personas actual.
+                for (Person persona : personasCargadas) {
+                    // Verificamos si la persona ya existe en la lista actual.
+                    boolean existe = false;
+                    for (Person d : personList) {
+                        if (d.getId_person().equals(persona.getId_person())) {
+                            existe = true;
+                            break;
+                        }
+                    }
+                    if (!existe) {
+                        personList.add(persona);
+                    }
+                }
+                System.out.println("Datos de persona cargados desde el archivo JSON.");
+            } else {
+                System.out.println("El archivo 'persona.json' no existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar los datos de personas desde el archivo JSON.");
+        }
+    }
+
+      private static void guardarPersonasEnArchivo_json() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("persona.json");
+
+            // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
+            // Luego, se escribe la lista de sedes en el archivo JSON.
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), personList);
+            System.out.println("Datos de persona guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
+
+        } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
+            System.out.println("Error al guardar los datos de persona en el archivo JSON.");
+        }
+    }
+      
     private void addEmployee() {
         String id_empleado = (leerCodigoNumerico());
         String id_campus = (leerCodigoNumerico());
@@ -223,6 +286,7 @@ public class Presenter {
                 personList.add(new Person(id_person, fistName, lastName));
                 System.out.println("Persona registrado exitosamente.");
                 //guardarEstudiantesEnArchivo();
+                guardarPersonasEnArchivo_json();
                 break; // Salir del bucle en caso de éxito
             }
         }
