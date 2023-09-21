@@ -16,6 +16,9 @@ import java.io.File; // Importa la clase File, que se utiliza para trabajar con 
 import javax.xml.parsers.ParserConfigurationException; // Importa la clase ParserConfigurationException, que se utiliza para manejar excepciones relacionadas con la configuración del analizador XML.
 import javax.xml.transform.TransformerException; // Importa la clase TransformerException, que se utiliza para manejar excepciones relacionadas con la transformación de XML.
 
+import models.Campus;
+import models.Company;
+import models.Employee;
 import models.Person;
 import org.w3c.dom.DOMException; // Importa la clase DOMException, que se utiliza para manejar excepciones relacionadas con el Document Object Model (DOM) de XML.
 import javax.xml.transform.Transformer; // Importa la clase Transformer, que se utiliza para transformar documentos XML.
@@ -25,7 +28,7 @@ import javax.xml.transform.dom.DOMSource; // Importa la clase DOMSource, que se 
 import javax.xml.transform.stream.StreamResult; // Importa la clase StreamResult, que se utiliza como destino de datos para la transformación XML.
 import javax.xml.parsers.DocumentBuilderFactory; // Importa la clase DocumentBuilderFactory, que se utiliza para crear instancias de DocumentBuilder para analizar documentos XML.
 import javax.xml.parsers.DocumentBuilder; // Importa la clase DocumentBuilder, que se utiliza para analizar documentos XML.
-import models.Person;
+
 import org.w3c.dom.Document; // Importa la clase Document, que representa un documento XML en el DOM.
 import org.w3c.dom.Element; // Importa la clase Element, que representa un elemento XML en el DOM.
 import org.w3c.dom.NodeList; // Importa la clase NodeList, que se utiliza para trabajar con listas de nodos en el DOM XML.
@@ -33,17 +36,26 @@ import org.w3c.dom.NodeList; // Importa la clase NodeList, que se utiliza para t
 
 public class MainXML {
 
-    private static List<Person> personas = new ArrayList<>();
+    private static List<Person> personList = new ArrayList<>();
+    private static List<Employee> employeeList = new ArrayList<>();
+    private static List<Campus> campusList = new ArrayList<>();
+    private static List<Company> companyList = new ArrayList<>();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) {
 
         // llamado a los metodos para persistir los archivos txt y XML
         cargarPersonasDesdeArchivo_json();
+        cargarEmpresasDesdeArchivo_json();
+        cargarSedesDesdeArchivo_json();
+        cargarPersonasDesdeArchivo_json();
+        cargarEmpleadosDesdeArchivo_json();
 
         Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            guardarEmpresasEnArchivo_json();
+            guardarSedesEnArchivo_json();
             guardarPersonasEnArchivo_json();
-            guardarPersonasEnArchivo_xml();
+            guardarEmpleadosEnArchivo_json();
             System.out.println("Guardando datos antes de salir...");
         }));
 
@@ -66,6 +78,8 @@ public class MainXML {
         } while (opcion != 0);
 
 // Llamado a los métodos para guardar los datos antes de salir
+        guardarEmpresasEnArchivo_json();
+        guardarSedesEnArchivo_json();
         guardarPersonasEnArchivo_json();
 
     }
@@ -101,6 +115,596 @@ public class MainXML {
         }
     }
 
+    /**
+     * Este método se utiliza para guardar la lista de empresas en un archivo
+     * JSON. Utiliza la biblioteca Jackson ObjectMapper para serializar la lista
+     * de empresas en formato JSON y escribirlo en el archivo "empresas.json".
+     * Si el archivo no existe, se crea. El JSON resultante se formatea con
+     * saltos de línea y sangría para una mejor legibilidad.
+     */
+    private static void guardarEmpresasEnArchivo_json() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("empresas.json");
+
+            // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
+            // Luego, se escribe la lista de departamentos en el archivo JSON.
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), companyList);
+            System.out.println("Datos de Empresa guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
+
+        } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
+            System.out.println("Error al guardar los datos de Empresa en el archivo JSON.");
+        }
+    }
+
+    private static void cargarEmpresasDesdeArchivo_json() {
+        companyList.clear(); // Limpiamos la lista actual antes de cargar los datos.
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("empresas.json");
+
+            if (Files.exists(filePath)) {
+                List<Company> empresasCargadas = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Company>>() {
+                });
+
+                // Iteramos sobre los departamentos cargados y añadimos cada uno a la lista de departamentos actual.
+                for (Company empresa : empresasCargadas) {
+                    // Verificamos si el departamento ya existe en la lista actual.
+                    boolean existe = false;
+                    for (Company d : companyList) {
+                        if (d.getCodigo_empresa().equals(empresa.getCodigo_empresa())) {
+                            existe = true;
+                            break;
+                        }
+                    }
+                    if (!existe) {
+                        companyList.add(empresa);
+                    }
+                }
+
+                System.out.println("Datos de Empresa cargados desde el archivo JSON.");
+            } else {
+                System.out.println("El archivo 'empresas.json' no existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar los datos de empresas desde el archivo JSON.");
+        }
+    }
+
+    private static void verEmpresasRegistradas() {
+        if (companyList.isEmpty()) {                                        //Verifica si la lista está vacía
+            System.out.println("No hay empresas registradas");
+        } else {
+            System.out.println("=== Empresas Registrados ===");
+            int index = 0;
+            for (Company empresa : companyList) {                     //bucle for-each que recorre la lista
+                System.out.println("Índice " + index + ": " + empresa);
+                index++;
+            }
+        }
+    }
+
+    private static void registrarEmpresa() {
+        System.out.println("=== Registrar Empresa ===");
+
+        // Declaración de variables para almacenar los datos del país
+        String nombre_empresa = null;
+        String codigo_empresa = null;
+        // Ciclo para validar y registrar los datos
+        while (true) {
+            if (nombre_empresa == null) {
+                System.out.print("nombre empresa: ");
+                nombre_empresa = leerCadenaNoVaciaTexto().toUpperCase();
+
+                // Validar si el pais ya está registrado por nombre
+                for (Company empresa : companyList) {
+                    if (empresa.getNombre_empresa().equalsIgnoreCase(nombre_empresa)) {
+                        System.out.println("la empresa con este nombre ya está registrada.");
+                        nombre_empresa = null; // Reiniciar para volver a pedir el dato
+                        break;
+                    }
+                }
+            } // Si el codigo del pais aún no se ha ingresado
+            else if (codigo_empresa == null) {
+                System.out.print("código empresa: ");
+                codigo_empresa = leerCodigoNumerico();
+
+                // Validar si el pais ya está registrado por código
+                for (Company empresa : companyList) {
+                    if (empresa.getCodigo_empresa().equals(codigo_empresa)) {
+                        System.out.println("La empresa con este código ya está registrada");
+                        codigo_empresa = null; // Reiniciar para volver a pedir el dato
+                        break;
+                    }
+                }
+            }
+            // Si se han ingresado todos los datos requeridos, registrar el país
+            if (nombre_empresa != null && codigo_empresa != null) {
+                companyList.add(new Company(nombre_empresa, codigo_empresa));
+                System.out.println("Empresa registrada exitosamente.");
+                guardarEmpresasEnArchivo_json();
+                break; // Salir del bucle en caso de éxito
+            }
+        }
+    }
+
+    private static void modificarEmpresa() {
+        System.out.println("=== Modificar Registro de Empresa ===");
+
+        // Verificar si hay empresas registrados
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registrados.");
+            return;
+        }
+
+        // Mostrar la lista de empresas registrados
+        verEmpresasRegistradas();
+
+        System.out.print("Ingrese el índice de la empresa que desea modificar: ");
+        int indice = leerIndiceValido(companyList.size());
+        Company empresaSeleccionada = companyList.get(indice);
+
+        // Inicializar variables con los valores actuales de la empresa seleccionada
+        String nuevoNombreEmpresa = empresaSeleccionada.getNombre_empresa();
+        String nuevoCodigoEmpresa = empresaSeleccionada.getCodigo_empresa();
+
+        // Solicitar al usuario que ingrese el nuevo nombre de empresa
+        while (true) {
+            System.out.print("Nuevo nombre de empresa(" + nuevoNombreEmpresa + "): ");
+            String input = leerCadenaNoVaciaTexto().toUpperCase();
+            boolean nombreEmpresaRegistrada = false;
+            if (!input.isEmpty()) {
+                for (Company empresa : companyList) {
+                    if (empresa.getNombre_empresa().equals(input) && !empresa.getNombre_empresa().equals(nuevoNombreEmpresa)) {
+                        System.out.println("La empresa con este nombre ya está registrada");
+                        nombreEmpresaRegistrada = true;
+                        break;
+                    }
+                }
+                if (!nombreEmpresaRegistrada) {
+                    nuevoNombreEmpresa = input;
+                    break;
+                }
+            } else {
+                System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+            }
+        }
+
+        // Solicitar al usuario que ingrese el nuevo código de empresa
+        while (true) {
+            System.out.print("Nuevo código de la empresa(" + nuevoCodigoEmpresa + "): ");
+            String input = leerCodigoNumerico();
+            boolean codigoEmpresaRegistrada = false;
+            if (!input.isEmpty()) {
+                for (Company empresa : companyList) {
+                    if (empresa.getCodigo_empresa().equals(input) && !empresa.getCodigo_empresa().equals(nuevoCodigoEmpresa)) {
+                        System.out.println("La empresa con este código ya está registrada");
+                        codigoEmpresaRegistrada = true;
+                        break;
+                    }
+                }
+                if (!codigoEmpresaRegistrada) {
+                    nuevoCodigoEmpresa = input;
+                    break;
+                }
+            } else {
+                System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+            }
+        }
+        // Actualizar los datos de la empresa con los valores nuevos
+        //TODO CORREGIR EL ERROR DE LAS SENTENCIAS COMENTADAS
+        //empresaSeleccionada.nombre_empresa = nuevoNombreEmpresa;
+        //empresaSeleccionada.codigo_empresa = nuevoCodigoEmpresa;
+        System.out.println("Empresa modificado exitosamente.");
+        guardarEmpresasEnArchivo_json();
+
+    }
+
+    private static void eliminarEmpresa() {
+        System.out.println("=== Eliminar Registro de Empresa ===");
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registrados.");
+            return;
+        }
+        verEmpresasRegistradas();
+        System.out.print("Ingrese el índice de la empresa que desea eliminar: ");
+        int indice = leerIndiceValido(companyList.size());
+        companyList.remove(indice);
+        System.out.println("empresa eliminada exitosamente.");
+        guardarEmpresasEnArchivo_json();
+    }
+
+    private static void verSedesRegistradas() {
+        if (campusList.isEmpty()) {
+            System.out.println("No hay sedes registradas.");
+        } else {
+            System.out.println("=== sedes Registradas ===");
+            int index = 0;
+            for (Campus sede : campusList) {                     //bucle for-each que recorre la lista
+                System.out.println("Índice " + index + ": " + sede);
+                index++;
+            }
+        }
+    }
+
+    private static void registrarSede() {
+        System.out.println("=== Registrar sede ===");
+
+        // Declaración de variables para almacenar los datos
+        String nombre_sede = null;
+        String codigo_sede = null;
+
+        // Ciclo para validar y registrar los datos
+        while (true) {
+            if (nombre_sede == null) {
+                System.out.print("nombre sede: ");
+                nombre_sede = leerCadenaNoVaciaTexto().toUpperCase();
+
+                // Validar si el  ya está registrado por nombre
+                for (Campus sede : campusList) {
+                    if (sede.getNombre_sede().equalsIgnoreCase(nombre_sede)) {
+                        System.out.println("la sede con este nombre ya está registrado.");
+                        nombre_sede = null; // Reiniciar para volver a pedir el dato
+                        break;
+                    }
+                }
+            } // Si el codigo de la sede aún no se ha ingresado
+            else if (codigo_sede == null) {
+                System.out.print("codigo sede: ");
+                codigo_sede = leerCodigoNumerico();
+
+                // Validar si la sede ya está registrado por código
+                for (Campus sede : campusList) {
+                    if (sede.getCodigo_sede().equals(codigo_sede)) {
+                        System.out.println("La sede con este código ya está registrada");
+                        codigo_sede = null; // Reiniciar para volver a pedir el dato
+                        break;
+                    }
+                }
+            }
+
+            // Si se han ingresado todos los datos requeridos, registrar la SEDE
+            if (nombre_sede != null && codigo_sede != null) {
+                campusList.add(new Campus(nombre_sede, codigo_sede, "N"));
+                System.out.println("sede registrada exitosamente.");
+                guardarSedesEnArchivo_json();
+                break; // Salir del bucle en caso de éxito
+            }
+        }
+    }
+
+    private static void eliminarSede() {
+        System.out.println("=== Eliminar Registro de sedes ===");
+        if (campusList.isEmpty()) {
+            System.out.println("No hay sedes registradas.");
+            return;
+        }
+        verSedesRegistradas();
+        System.out.print("Ingrese el índice de la sede que desea eliminar: ");
+        int indice = leerIndiceValido(campusList.size());
+        campusList.remove(indice);
+        System.out.println("sede eliminada exitosamente.");
+        guardarSedesEnArchivo_json();
+    }
+
+    //asociar sede a empresa
+    private static void Asociar_Sede_Empresa() {
+        cargarEmpresasDesdeArchivo_json(); // Cargar las empresa registradas desde el archivo JSON
+
+        System.out.println("=== ASOCIAR SEDE A EMPRESA===");
+
+        if (campusList.isEmpty()) {
+            System.out.println("No hay sedes registradas.");
+            return;
+        }
+        verSedesRegistradas();
+
+        System.out.print("Ingrese el índice de la sede que desea asociar a la empresa: ");
+        int indiceSede = leerIndiceValido(campusList.size());
+
+        Campus sedeSeleccionada = campusList.get(indiceSede);
+
+        // Verificar si la sede ya está asociada a alguna empresa
+        for (Company empresa : companyList) {
+            for (Campus sede : empresa.getLista_sedes_empresa()) {
+                if (sede.getCodigo_sede().equals(sedeSeleccionada.getCodigo_sede())) {
+                    System.out.println("La sede ya está asociada a una Empresa.");
+                    return;
+                }
+            }
+        }
+
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registradas.");
+            return;
+        }
+        verEmpresasRegistradas();
+
+        System.out.print("Ingrese el índice de la empresa para la que desea asociar la sede: ");
+        int indiceEmpresa = leerIndiceValido(companyList.size());
+
+        Company empresaSeleccionada = companyList.get(indiceEmpresa);
+
+        // Verificar si la sede ya está asociada a la empresa seleccionada
+        for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
+            if (sede.getCodigo_sede().equals(sedeSeleccionada.getCodigo_sede())) {
+                System.out.println("La sede ya está asociada a la empresa.");
+                return;
+            }
+        }
+
+        empresaSeleccionada.getLista_sedes_empresa().add(sedeSeleccionada);
+        System.out.println("Sede asociada exitosamente a la Empresa");
+        guardarEmpresasEnArchivo_json();
+    }
+
+    private static void desasociarSedeEmpresa() {
+        System.out.println("=== Desasociar sede de empresa===");
+
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registradas.");
+            return;
+        }
+
+        // Mostrar la lista de empresas
+        verEmpresasRegistradas();
+        cargarEmpresasDesdeArchivo_json();
+
+        System.out.print("Ingrese el índice de la empresa de la que desea desasociar una sede: ");
+        int indiceEmpresa = leerIndiceValido(companyList.size());
+
+        Company empresaSeleccionada = companyList.get(indiceEmpresa);
+
+        if (empresaSeleccionada.getLista_sedes_empresa().isEmpty()) {
+            System.out.println("No hay sedes asociadas a esta empresa.");
+            return;
+        }
+
+        // Mostrar la lista de sedes de la empresa seleccionado
+        System.out.println("Sedes asociadas a la empresa" + empresaSeleccionada.getLista_sedes_empresa() + ":");
+        for (int i = 0; i < empresaSeleccionada.getLista_sedes_empresa().size(); i++) {
+            Campus sede = empresaSeleccionada.getLista_sedes_empresa().get(i);
+            System.out.println(i + ": " + sede.getNombre_sede());
+        }
+
+        System.out.print("Ingrese el índice de la sede que desea desasociar de la empresa: ");
+        int indiceSede = leerIndiceValido(empresaSeleccionada.getLista_sedes_empresa().size());
+
+        Campus sedeSeleccionada = empresaSeleccionada.getLista_sedes_empresa().get(indiceSede);
+
+        // Desasociar la sede de la empresa
+        empresaSeleccionada.getLista_sedes_empresa().remove(sedeSeleccionada);
+        System.out.println("Sede desasociada exitosamente de la empresa");
+        guardarEmpresasEnArchivo_json();
+    }
+
+    private static void ver__Sedes_Empresa() {
+        System.out.println("=== Sedes de la Empresa ===");
+
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registradas.");
+            return;
+        }
+        verEmpresasRegistradas();
+        cargarEmpresasDesdeArchivo_json();
+
+        System.out.print("Ingrese el índice de la Empresa de la cual desea ver las sedes registradas: ");
+        int indiceEmpresa = leerIndiceValido(companyList.size());
+
+        Company empresaSeleccionada = companyList.get(indiceEmpresa);
+
+        if (empresaSeleccionada.getLista_sedes_empresa().isEmpty()) {
+            System.out.println("No hay sedes en esta Empresa");
+        } else {
+            System.out.println("Sedes asociadas a " + empresaSeleccionada.getNombre_empresa() + ":");
+            for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
+                System.out.println("- " + sede.getNombre_sede() + " (" + sede.getCodigo_sede() + ")" + " ( Sede Principal: " + sede.getSede_principal() + ")");
+            }
+        }
+    }
+
+    private static void elegir_sede_principal_empresa() {
+        System.out.println("=== ELEGIR SEDE PRINCIPAL DE LA EMPRESA===");
+
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registradas.");
+            return;
+        }
+        verEmpresasRegistradas();
+
+        System.out.print("Ingrese el índice de la empresa de la que desea seleccionar la sede principal: ");
+        int indiceEmpresa = leerIndiceValido(companyList.size());
+
+        Company empresaSeleccionada = companyList.get(indiceEmpresa);
+
+        if (empresaSeleccionada.getLista_sedes_empresa().isEmpty()) {
+            System.out.println("La empresa seleccionada no tiene sedes asociadas.");
+            return;
+        }
+
+        System.out.println("sedes de " + empresaSeleccionada.getNombre_empresa() + ":");
+        for (int i = 0; i < empresaSeleccionada.getLista_sedes_empresa().size(); i++) {
+            System.out.println(i + ". " + empresaSeleccionada.getLista_sedes_empresa().get(i).getNombre_sede());
+        }
+
+        System.out.print("Ingrese el índice de la sede que desea elegir como sede principal de la empresa: ");
+        int indiceSede = leerIndiceValido(empresaSeleccionada.getLista_sedes_empresa().size());
+
+        Campus sedeSeleccionada = empresaSeleccionada.getLista_sedes_empresa().get(indiceSede);
+
+        if ("S".equals(sedeSeleccionada.getCodigo_sede())) {
+            System.out.println("La sede seleccionada ya es sede principal de una empresa");
+        } else {
+
+            // Verificar si otra sede ya es la principal de la empresa
+            boolean sedePrincipalYaElegida = false;
+            for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
+                if (!sede.equals(sedeSeleccionada) && "S".equals(sede.getSede_principal())) {
+                    sedePrincipalYaElegida = true;
+                    break;
+                }
+            }
+
+            if (sedePrincipalYaElegida) {
+                System.out.println("Ya se ha elegido otra sede principal para la empresa seleccionada");
+            } else {
+                //TODO CORREGIR ESTA SENTENCIA
+                //sedeSeleccionada.sede_principal = "S";
+                System.out.println("sede seleccionada como sede ppal de la empresa");
+                guardarEmpresasEnArchivo_json();
+
+            }
+        }
+    }
+
+    private static void modificar_sede_principal_empresa() {
+        System.out.println("=== MODIFICAR SEDE PRINCIPAL DE LA EMPRESA ===");
+
+        if (companyList.isEmpty()) {
+            System.out.println("No hay empresas registradas.");
+            return;
+        }
+
+        // Mostrar la lista de empresas
+        verEmpresasRegistradas();
+
+        System.out.print("Ingrese el índice de la empresa para la que desea modificar la sede principal: ");
+        int indiceEmpresa = leerIndiceValido(companyList.size());
+
+        Company empresaSeleccionada = companyList.get(indiceEmpresa);
+
+        if (empresaSeleccionada.getLista_sedes_empresa().isEmpty()) {
+            System.out.println("La empresa seleccionada no tiene sedes asociadas");
+            return;
+        }
+
+        System.out.println("Sedes de " + empresaSeleccionada.getNombre_empresa() + ":");
+        for (int i = 0; i < empresaSeleccionada.getLista_sedes_empresa().size(); i++) {
+            System.out.println(i + ". " + empresaSeleccionada.getLista_sedes_empresa().get(i).getNombre_sede());
+        }
+
+        System.out.print("Ingrese el índice de la sedes que desea elegir como nueva sede principal de la empresa: ");
+        int indiceSede = leerIndiceValido(empresaSeleccionada.getLista_sedes_empresa().size());
+
+        Campus nuevaSedePrincipal = empresaSeleccionada.getLista_sedes_empresa().get(indiceSede);
+
+        // Cambiar- actualizar la sede pincipal de la empresa
+        for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
+            if ("S".equals(sede.getSede_principal())) {
+                //TODO CORREGIR LA SENTECIA COMENTADA
+                //sede.sede_principal = "N";
+                break;
+            }
+        }
+        //TODO CORREGIR LA SENTECIA COMENTADA
+        //nuevaSedePrincipal.sede_principal = "S";
+        System.out.println("Sede actualizada/ seleccionada como sede principal de la empresa.");
+        guardarEmpresasEnArchivo_json();
+
+    }
+
+
+    private static void guardarSedesEnArchivo_json() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("sedes.json");
+
+            // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
+            // Luego, se escribe la lista de sedes en el archivo JSON.
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), campusList);
+            System.out.println("Datos de Sede guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
+
+        } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
+            System.out.println("Error al guardar los datos de Sede en el archivo JSON.");
+        }
+    }
+
+    private static void cargarSedesDesdeArchivo_json() {
+        campusList.clear(); // Limpiamos la lista actual antes de cargar los datos.
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("sedes.json");
+
+            if (Files.exists(filePath)) {
+                List<Campus> sedesCargadas = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Campus>>() {
+                });
+
+                // Iteramos sobre los departamentos cargados y añadimos cada uno a la lista de departamentos actual.
+                for (Campus sede : sedesCargadas) {
+                    // Verificamos si el departamento ya existe en la lista actual.
+                    boolean existe = false;
+                    for (Campus d : campusList) {
+                        if (d.getCodigo_sede().equals(sede.getCodigo_sede())) {
+                            existe = true;
+                            break;
+                        }
+                    }
+                    if (!existe) {
+                        campusList.add(sede);
+                    }
+                }
+
+                System.out.println("Datos de Sede cargados desde el archivo JSON.");
+            } else {
+                System.out.println("El archivo 'sedes.json' no existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar los datos de sedes desde el archivo JSON.");
+        }
+    }
+
+    private static void guardarEmpleadosEnArchivo_json() {
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("empleados.json");
+
+            // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
+            // Luego, se escribe la lista de sedes en el archivo JSON.
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), employeeList);
+            System.out.println("Datos de empleado guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
+
+        } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
+            System.out.println("Error al guardar los datos de empleado en el archivo JSON.");
+        }
+    }
+
+    private static void cargarEmpleadosDesdeArchivo_json() {
+        employeeList.clear(); // Limpiamos la lista actual antes de cargar los datos.
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Path filePath = Paths.get("empleados.json");
+
+            if (Files.exists(filePath)) {
+                List<Employee> empleadosCargados = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Employee>>() {
+                });
+
+                // Iteramos sobre las personas cargadas y añadimos cada uno a la lista de personas actual.
+                for (Employee empleado : empleadosCargados) {
+                    // Verificamos si la persona ya existe en la lista actual.
+                    boolean existe = false;
+                    for (Employee d : employeeList) {
+                        if (d.getTypeJob().equals(empleado.getTypeJob())) {
+                            existe = true;
+                            break;
+                        }
+                    }
+                    if (!existe) {
+                        employeeList.add(empleado);
+                    }
+                }
+
+                System.out.println("Datos de empleados cargados desde el archivo JSON.");
+            } else {
+                System.out.println("El archivo 'empleados.json' no existe.");
+            }
+        } catch (IOException e) {
+            System.out.println("No se pudo cargar los datos de empleados desde el archivo JSON.");
+        }
+    }
+
     ///////////////////
     private static void guardarPersonasEnArchivo_json() {
         try {
@@ -109,7 +713,7 @@ public class MainXML {
 
             // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
             // Luego, se escribe la lista de sedes en el archivo JSON.
-            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), personas);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), personList);
             System.out.println("Datos de persona guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
 
         } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
@@ -118,7 +722,7 @@ public class MainXML {
     }
 
     private static void cargarPersonasDesdeArchivo_json() {
-        personas.clear(); // Limpiamos la lista actual antes de cargar los datos.
+        personList.clear(); // Limpiamos la lista actual antes de cargar los datos.
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -131,14 +735,14 @@ public class MainXML {
                 for (Person persona : personasCargadas) {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
-                    for (Person d : personas) {
+                    for (Person d : personList) {
                         if (d.getId_persona().equals(persona.getId_persona())) {
                             existe = true;
                             break;
                         }
                     }
                     if (!existe) {
-                        personas.add(persona);
+                        personList.add(persona);
                     }
                 }
                 System.out.println("Datos de persona cargados desde el archivo JSON.");
@@ -251,7 +855,7 @@ public class MainXML {
 
                         // Validar si la persona ya está registrada por id
                         boolean idRepetido = false;
-                        for (Person persona : personas) {
+                        for (Person persona : personList) {
                             if (persona.getId_persona().equals(id_persona)) {
                                 System.out.println("La persona con este id ya está registrada.");
                                 id_persona = null; // Reiniciar para volver a pedir el dato
@@ -267,7 +871,7 @@ public class MainXML {
 
                     // Si se han ingresado todos los datos requeridos, registrar la persona
                     if (nombre_persona != null && apellido_persona != null && id_persona != null) {
-                        personas.add(new Person(id_persona, nombre_persona, apellido_persona));
+                        personList.add(new Person(id_persona, nombre_persona, apellido_persona));
                         System.out.println("Persona registrada exitosamente.");
 
                         // Llamar a la función para guardar las personas en un archivo JSON
@@ -282,11 +886,11 @@ public class MainXML {
                 System.out.println("=== Personas Registradas ===");
 
                 // Verificar si hay personas registradas
-                if (personas.isEmpty()) {
+                if (personList.isEmpty()) {
                     System.out.println("No hay personas registradas.");
                 } else {
                     int index = 0;
-                    for (Person persona : personas) {
+                    for (Person persona : personList) {
                         System.out.println("Índice " + index + ": " + persona);
                         index++;
                     }
@@ -297,8 +901,8 @@ public class MainXML {
         System.out.println("=== Modificar Persona ===");
 
         // Mostrar la lista de personas registradas con índices
-        for (int i = 0; i < personas.size(); i++) {
-            Person persona = personas.get(i);
+        for (int i = 0; i < personList.size(); i++) {
+            Person persona = personList.get(i);
             System.out.println("Índice: " + i);
             System.out.println("ID: " + persona.getId_persona());
             System.out.println("Nombre: " + persona.getNombre_apellido_persona());
@@ -306,7 +910,7 @@ public class MainXML {
             System.out.println();
         }
 
-        if (personas.isEmpty()) {
+        if (personList.isEmpty()) {
             System.out.println("No hay personas registradas.");
             return;
         }
@@ -315,8 +919,8 @@ public class MainXML {
         int indiceSeleccionado = leerIndicePersona();
 
         // Verificar que el índice esté dentro del rango válido
-        if (indiceSeleccionado >= 0 && indiceSeleccionado < personas.size()) {
-            Person personaAModificar = personas.get(indiceSeleccionado);
+        if (indiceSeleccionado >= 0 && indiceSeleccionado < personList.size()) {
+            Person personaAModificar = personList.get(indiceSeleccionado);
 
             System.out.println("Persona seleccionada:");
             System.out.println("ID: " + personaAModificar.getId_persona());
@@ -347,14 +951,14 @@ public class MainXML {
 
             private static void eliminar_Persona () {
                 System.out.println("=== Eliminar Registro de personas ===");
-                if (personas.isEmpty()) {
+                if (personList.isEmpty()) {
                     System.out.println("No hay personas registradas.");
                     return;
                 }
                 ver_personas_registradas();
                 System.out.print("Ingrese el índice de la persona que desea eliminar: ");
-                int indice = leerIndiceValido(personas.size());
-                personas.remove(indice);
+                int indice = leerIndiceValido(personList.size());
+                personList.remove(indice);
                 System.out.println("persona eliminada exitosamente.");
                 guardarPersonasEnArchivo_json();
                 guardarPersonasEnArchivo_xml();
@@ -385,7 +989,7 @@ public class MainXML {
                     doc.appendChild(rootElement);
 
 // Agregar cada persona como un elemento al documento
-                    for (Person persona : personas) {
+                    for (Person persona : personList) {
                         Element personaElement = doc.createElement("Persona");
                         rootElement.appendChild(personaElement);
 
