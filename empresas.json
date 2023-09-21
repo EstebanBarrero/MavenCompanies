@@ -1,5 +1,15 @@
 [ {
   "nombre_empresa" : "SOFTBIT",
   "codigo_empresa" : "01",
-  "lista_sedes_empresa" : [ ]
+  "lista_sedes_empresa" : [ {
+    "nombre_sede" : "SUR",
+    "codigo_sede" : "02",
+    "sede_principal" : "N",
+    "lista_empleados_sede" : [ ]
+  }, {
+    "nombre_sede" : "POLO",
+    "codigo_sede" : "50",
+    "sede_principal" : "N",
+    "lista_empleados_sede" : [ ]
+  } ]
 } ]

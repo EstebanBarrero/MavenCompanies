@@ -5,4 +5,5 @@
     <option id="2">Registrar Empresas</option>
     <option id="3">Modificar Empresas</option>
     <option id="4">Eliminar Empresas</option>
+    <option id="5">Asociar sede a empresa</option>
 </menu>

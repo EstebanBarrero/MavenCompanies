@@ -122,11 +122,12 @@ public class MainXML {
                         cargarMenuDesdeXML(typeMenu);
                         opcionSub = leerOpcion();
                         switch (opcionSub) {
+                            case 0 -> view.showBye();
                             case 1 -> verEmpresasRegistradas(); //Ver personas registradas
                             case 2 -> registrarEmpresa();  //Registrar_Empleado
                             case 3 -> modificarEmpresa();//Modificar_Persona
                             case 4 -> eliminarEmpresa(); //Eliminar_Persona
-                            case 0 -> view.showBye();
+                            case 5 -> asociarSedeEmpresa();
                             default -> System.out.println("Opción no válida. Intente nuevamente.");
                         }
                     }while (opcionSub != 0);
@@ -477,7 +478,7 @@ public class MainXML {
     }
 
     //asociar sede a empresa
-    private static void Asociar_Sede_Empresa() {
+    private static void asociarSedeEmpresa() {
         cargarEmpresasDesdeArchivo_json(); // Cargar las empresa registradas desde el archivo JSON
 
         System.out.println("=== ASOCIAR SEDE A EMPRESA===");
@@ -1015,7 +1016,7 @@ public class MainXML {
                         String input = reader.readLine().trim();
                         if (!input.isEmpty()) {
                             opcion = Integer.parseInt(input);
-                            if (opcion >= 0 && opcion <= 4) {
+                            if (opcion >= 0 && opcion <= 6) {
                                 break;
                             } else {
                                 System.out.println("Opción no válida. Intente nuevamente.");
