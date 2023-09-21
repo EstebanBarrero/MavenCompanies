@@ -4,6 +4,10 @@
  */
 package presenters;
 
+import enums.TypeJob;
+import models.*;
+import views.View;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

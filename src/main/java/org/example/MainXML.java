@@ -15,6 +15,8 @@ import java.io.File; // Importa la clase File, que se utiliza para trabajar con 
 
 import javax.xml.parsers.ParserConfigurationException; // Importa la clase ParserConfigurationException, que se utiliza para manejar excepciones relacionadas con la configuración del analizador XML.
 import javax.xml.transform.TransformerException; // Importa la clase TransformerException, que se utiliza para manejar excepciones relacionadas con la transformación de XML.
+
+import models.Person;
 import org.w3c.dom.DOMException; // Importa la clase DOMException, que se utiliza para manejar excepciones relacionadas con el Document Object Model (DOM) de XML.
 import javax.xml.transform.Transformer; // Importa la clase Transformer, que se utiliza para transformar documentos XML.
 import javax.xml.transform.TransformerFactory; // Importa la clase TransformerFactory, que se utiliza para crear instancias de Transformer.
@@ -30,7 +32,7 @@ import org.w3c.dom.NodeList; // Importa la clase NodeList, que se utiliza para t
 
 public class MainXML {
 
-    private static List<Persona> personas = new ArrayList<>();
+    private static List<Person> personas = new ArrayList<>();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
     public static void main(String[] args) {
@@ -127,14 +129,14 @@ public class MainXML {
             Path filePath = Paths.get("persona.json");
 
             if (Files.exists(filePath)) {
-                List<Persona> personasCargadas = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Persona>>() {
+                List<Person> personasCargadas = objectMapper.readValue(filePath.toFile(), new TypeReference<List<Person>>() {
                 });
                 // Iteramos sobre las personas cargadas y añadimos cada uno a la lista de personas actual.
-                for (Persona persona : personasCargadas) {
+                for (Person persona : personasCargadas) {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
-                    for (Persona d : personas) {
-                        if (d.getId_persona().equals(persona.getId_persona())) {
+                    for (Person person : personas) {
+                        if (person.getId_person().equals(persona.getId_person())) {
                             existe = true;
                             break;
                         }
@@ -252,8 +254,8 @@ public class MainXML {
 
                 // Validar si la persona ya está registrada por id
                 boolean idRepetido = false;
-                for (Persona persona : personas) {
-                    if (persona.getId_persona().equals(id_persona)) {
+                for (Person persona : personas) {
+                    if (persona.getId_person().equals(id_persona)) {
                         System.out.println("La persona con este id ya está registrada.");
                         id_persona = null; // Reiniciar para volver a pedir el dato
                         idRepetido = true;
@@ -268,7 +270,7 @@ public class MainXML {
 
             // Si se han ingresado todos los datos requeridos, registrar la persona
             if (nombre_persona != null && apellido_persona != null && id_persona != null) {
-                personas.add(new Persona(id_persona, nombre_persona, apellido_persona));
+                personas.add(new Person(id_persona, nombre_persona, apellido_persona));
                 System.out.println("Persona registrada exitosamente.");
 
                 // Llamar a la función para guardar las personas en un archivo JSON
@@ -287,7 +289,7 @@ public class MainXML {
             System.out.println("No hay personas registradas.");
         } else {
             int index = 0;
-            for (Persona persona : personas) {
+            for (Person persona : personas) {
                 System.out.println("Índice " + index + ": " + persona);
                 index++;
             }
@@ -299,11 +301,11 @@ public class MainXML {
 
         // Mostrar la lista de personas registradas con índices
         for (int i = 0; i < personas.size(); i++) {
-            Persona persona = personas.get(i);
+            Person persona = personas.get(i);
             System.out.println("Índice: " + i);
-            System.out.println("ID: " + persona.getId_persona());
-            System.out.println("Nombre: " + persona.getNombres());
-            System.out.println("Apellido: " + persona.getApellidos());
+            System.out.println("ID: " + persona.getId_person());
+            System.out.println("Nombre: " + persona.getLastName());
+            System.out.println("Apellido: " + persona.getFistName());
             System.out.println();
         }
 
@@ -317,23 +319,23 @@ public class MainXML {
 
         // Verificar que el índice esté dentro del rango válido
         if (indiceSeleccionado >= 0 && indiceSeleccionado < personas.size()) {
-            Persona personaAModificar = personas.get(indiceSeleccionado);
+            Person personaAModificar = personas.get(indiceSeleccionado);
 
             System.out.println("Persona seleccionada:");
-            System.out.println("ID: " + personaAModificar.getId_persona());
-            System.out.println("Nombre actual: " + personaAModificar.getNombres());
-            System.out.println("Apellido actual: " + personaAModificar.getApellidos());
+            System.out.println("ID: " + personaAModificar.getId_person());
+            System.out.println("Nombre actual: " + personaAModificar.getFistName());
+            System.out.println("Apellido actual: " + personaAModificar.getLastName());
 
             System.out.print("Nuevo nombre: ");
             String nuevoNombre = leerCadenaNoVaciaTexto();
             if (!nuevoNombre.isEmpty()) {
-                personaAModificar.setNombres(nuevoNombre.toUpperCase());
+                personaAModificar.setFistName(nuevoNombre.toUpperCase());
             }
 
             System.out.print("Nuevo apellido: ");
             String nuevoApellido = leerCadenaNoVaciaTexto();
             if (!nuevoApellido.isEmpty()) {
-                personaAModificar.setApellidos(nuevoApellido.toUpperCase());
+                personaAModificar.setLastName(nuevoApellido.toUpperCase());
             }
 
             System.out.println("Persona modificada exitosamente.");
@@ -386,21 +388,21 @@ public class MainXML {
             doc.appendChild(rootElement);
 
 // Agregar cada persona como un elemento al documento
-            for (Persona persona : personas) {
+            for (Person persona : personas) {
                 Element personaElement = doc.createElement("Persona");
                 rootElement.appendChild(personaElement);
 
 // Crear elementos para ID, Nombre y Apellido de la persona
                 Element idElement = doc.createElement("ID");
-                idElement.appendChild(doc.createTextNode(persona.getId_persona()));
+                idElement.appendChild(doc.createTextNode(persona.getId_person()));
                 personaElement.appendChild(idElement);
 
                 Element nombreElement = doc.createElement("Nombre");
-                nombreElement.appendChild(doc.createTextNode(persona.getNombres()));
+                nombreElement.appendChild(doc.createTextNode(persona.getFistName()));
                 personaElement.appendChild(nombreElement);
 
                 Element apellidoElement = doc.createElement("Apellido");
-                apellidoElement.appendChild(doc.createTextNode(persona.getApellidos()));
+                apellidoElement.appendChild(doc.createTextNode(persona.getLastName()));
                 personaElement.appendChild(apellidoElement);
             }
 
