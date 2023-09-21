@@ -59,29 +59,106 @@ public class MainXML {
             System.out.println("Guardando datos antes de salir...");
         }));
 
+        //TODO REVISAR PORQUE NO SIRVE EL 5 O 0 PARA SALIR DEL MENU
         int opcion;
-
-        do {
-            cargarMenuDesdeXML();
+        do{
+            showMenu();
             opcion = leerOpcion();
-
-            switch (opcion) {
-                case 1 -> ver_personas_registradas(); //Ver personas registradas
-                case 2 -> registrar_Persona();  //Registrar_Persona
-                case 3 -> modificar_Persona();//Modificar_Persona
-                case 4 -> eliminar_Persona(); //Eliminar_Persona
-
-                case 0 -> System.out.println("¡Hasta luego!");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
+            String typeMenu;
+            switch (opcion){
+                case 1 -> {
+                    do{
+                        typeMenu = "registerPerson.xml";
+                        cargarMenuDesdeXML(typeMenu);
+                        int opcionSub = leerOpcion();
+                        switch (opcionSub) {
+                            case 1 -> ver_personas_registradas(); //Ver personas registradas
+                            case 2 -> registrar_Persona();  //Registrar_Persona
+                            case 3 -> modificar_Persona();//Modificar_Persona
+                            case 4 -> eliminar_Persona(); //Eliminar_Persona
+                            case 5 -> System.out.println("¡Hasta luego!");
+                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                        }
+                    }while (opcion != 5);
+                }
+                case 3 -> {
+                    do{
+                        typeMenu = "registerCampus.xml";
+                        cargarMenuDesdeXML(typeMenu);
+                        opcion = leerOpcion();
+                        switch (opcion) {
+                            case 1 -> verSedesRegistradas(); //Ver personas registradas
+                            case 2 -> registrarSede();  //Registrar_Persona
+                            case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
+                            case 4 -> eliminarSede(); //Eliminar_Persona
+                            case 5 -> System.out.println("¡Hasta luego!");
+                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                        }
+                    }while (opcion != 5);
+                }
             }
 
-        } while (opcion != 0);
-
-// Llamado a los métodos para guardar los datos antes de salir
+        }while (opcion != 5);
         guardarEmpresasEnArchivo_json();
         guardarSedesEnArchivo_json();
         guardarPersonasEnArchivo_json();
 
+
+
+        int opcion2;
+
+        do {
+            //cargarMenuDesdeXML(typeMenu);
+            opcion = leerOpcion();
+
+            switch (opcion) {
+                /*TODO ESTO ES DE PERSONAS
+                case 1 -> ver_personas_registradas(); //Ver personas registradas
+                case 2 -> registrar_Persona();  //Registrar_Persona
+                case 3 -> modificar_Persona();//Modificar_Persona
+                case 4 -> eliminar_Persona(); //Eliminar_Persona*/
+                case 1 -> verSedesRegistradas(); //Ver personas registradas
+                case 2 -> registrarSede();  //Registrar_Persona
+                case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
+                case 4 -> eliminarSede(); //Eliminar_Persona
+
+                case 5 -> System.out.println("¡Hasta luego!");
+                default -> System.out.println("Opción no válida. Intente nuevamente.");
+            }
+
+        } while (opcion != 5);
+
+// Llamado a los métodos para guardar los datos antes de salir
+
+
+    }
+    /**
+     * Carga y muestra el menú de opciones desde un archivo XML. El método lee
+     * el archivo "menu.xml", analiza su contenido y muestra las opciones en la
+     * consola. Si se produce un error durante el proceso de lectura o análisis,
+     * muestra un mensaje de error.
+     */
+    private static void showMenu() {
+        try {
+// Crear un objeto File que representa el archivo "menu.xml"
+            File menuFile = new File("mainMenu.xml");
+// Crear una instancia de DocumentBuilderFactory para configurar el analizador XML
+            DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+// Crear un objeto DocumentBuilder para analizar el contenido XML
+            DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+// Analizar el contenido del archivo XML y crear un documento DOM: Document Object Model (Modelo de Objetos de Documento)
+            Document doc = dBuilder.parse(menuFile);
+// Obtener la lista de nodos "option" del documento XML
+            NodeList options = doc.getElementsByTagName("option");
+// Mostrar el menú en la consola
+            System.out.println("=== MENÚ EN/ES ===");
+            for (int i = 0; i < options.getLength(); i++) {
+                Element option = (Element) options.item(i);
+                System.out.println((i + 1) + ". " + option.getTextContent());
+            }
+        } catch (Exception e) {
+            System.out.println("Error al cargar el menú desde el archivo XML.");
+        }
     }
 
     ////////////////////
@@ -92,10 +169,10 @@ public class MainXML {
      * consola. Si se produce un error durante el proceso de lectura o análisis,
      * muestra un mensaje de error.
      */
-    private static void cargarMenuDesdeXML() {
+    private static void cargarMenuDesdeXML(String pathname) {
         try {
 // Crear un objeto File que representa el archivo "menu.xml"
-            File menuFile = new File("registerPerson.xml");
+            File menuFile = new File(pathname);
 // Crear una instancia de DocumentBuilderFactory para configurar el analizador XML
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 // Crear un objeto DocumentBuilder para analizar el contenido XML
@@ -105,7 +182,7 @@ public class MainXML {
 // Obtener la lista de nodos "option" del documento XML
             NodeList options = doc.getElementsByTagName("option");
 // Mostrar el menú en la consola
-            System.out.println("=== MENÚ - REGISTRO DE PERSONAS EN/ES ===");
+            System.out.println("=== MENÚ EN/ES ===");
             for (int i = 0; i < options.getLength(); i++) {
                 Element option = (Element) options.item(i);
                 System.out.println((i + 1) + ". " + option.getTextContent());
@@ -547,8 +624,6 @@ public class MainXML {
             if (sedePrincipalYaElegida) {
                 System.out.println("Ya se ha elegido otra sede principal para la empresa seleccionada");
             } else {
-                //TODO CORREGIR ESTA SENTENCIA
-                //sedeSeleccionada.sede_principal = "S";
                 sedeSeleccionada.setSede_principal("S");
                 System.out.println("sede seleccionada como sede ppal de la empresa");
                 guardarEmpresasEnArchivo_json();
@@ -560,7 +635,7 @@ public class MainXML {
     private static void modificar_sede_principal_empresa() {
         System.out.println("=== MODIFICAR SEDE PRINCIPAL DE LA EMPRESA ===");
 
-        if (companyList.isEmpty()) {
+        if (campusList.isEmpty()) {
             System.out.println("No hay empresas registradas.");
             return;
         }
@@ -591,14 +666,10 @@ public class MainXML {
         // Cambiar- actualizar la sede pincipal de la empresa
         for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
             if ("S".equals(sede.getSede_principal())) {
-                //TODO CORREGIR LA SENTECIA COMENTADA
-                //sede.sede_principal = "N";
                 sede.setNombre_sede("N");
                 break;
             }
         }
-        //TODO CORREGIR LA SENTECIA COMENTADA
-        //nuevaSedePrincipal.sede_principal = "S";
         nuevaSedePrincipal.setSede_principal("S");
         System.out.println("Sede actualizada/ seleccionada como sede principal de la empresa.");
         guardarEmpresasEnArchivo_json();
