@@ -6,4 +6,7 @@
     <option id="3">Modificar Empresas</option>
     <option id="4">Eliminar Empresas</option>
     <option id="5">Asociar sede a empresa</option>
+    <option id="6">Desasociar sede a empresa</option>
+    <option id="7">Ver sedes relacionadas a empresas</option>
+    <option id="8">Elegir sede principal empresa</option>
 </menu>

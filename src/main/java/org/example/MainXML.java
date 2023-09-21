@@ -128,6 +128,9 @@ public class MainXML {
                             case 3 -> modificarEmpresa();//Modificar_Persona
                             case 4 -> eliminarEmpresa(); //Eliminar_Persona
                             case 5 -> asociarSedeEmpresa();
+                            case 6 -> desasociarSedeEmpresa();
+                            case 7 -> ver__Sedes_Empresa();
+                            case 8 -> elegir_sede_principal_empresa();
                             default -> System.out.println("Opción no válida. Intente nuevamente.");
                         }
                     }while (opcionSub != 0);
@@ -1016,7 +1019,7 @@ public class MainXML {
                         String input = reader.readLine().trim();
                         if (!input.isEmpty()) {
                             opcion = Integer.parseInt(input);
-                            if (opcion >= 0 && opcion <= 6) {
+                            if (opcion >= 0 && opcion <= 8) {
                                 break;
                             } else {
                                 System.out.println("Opción no válida. Intente nuevamente.");
