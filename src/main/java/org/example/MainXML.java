@@ -83,7 +83,7 @@ public class MainXML {
     private static void cargarMenuDesdeXML() {
         try {
 // Crear un objeto File que representa el archivo "menu.xml"
-            File menuFile = new File("menu.xml");
+            File menuFile = new File("registerPerson.xml");
 // Crear una instancia de DocumentBuilderFactory para configurar el analizador XML
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 // Crear un objeto DocumentBuilder para analizar el contenido XML
