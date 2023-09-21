@@ -4,16 +4,13 @@
  */
 package presenters;
 
-<<<<<<< HEAD
 import enums.TypeJob;
 import models.*;
 import views.View;
 
-=======
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import enums.TypeJob;
->>>>>>> 9213894b337d794404357748b8458911b891e431
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;

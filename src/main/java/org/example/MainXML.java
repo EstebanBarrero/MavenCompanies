@@ -136,19 +136,18 @@ public class MainXML {
                 for (Person persona : personasCargadas) {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
-<<<<<<< HEAD
                     for (Person person : personas) {
                         if (person.getId_person().equals(persona.getId_person())) {
-=======
                     for (Person d : personas) {
                         if (d.getId_person().equals(persona.getId_person())) {
->>>>>>> 9213894b337d794404357748b8458911b891e431
                             existe = true;
                             break;
                         }
                     }
                     if (!existe) {
                         personas.add(persona);
+                    }
+                }
                     }
                 }
                 System.out.println("Datos de persona cargados desde el archivo JSON.");
@@ -310,13 +309,12 @@ public class MainXML {
             Person persona = personas.get(i);
             System.out.println("Índice: " + i);
             System.out.println("ID: " + persona.getId_person());
-<<<<<<< HEAD
             System.out.println("Nombre: " + persona.getLastName());
             System.out.println("Apellido: " + persona.getFistName());
-=======
+
             System.out.println("Nombre: " + persona.getFistName());
             System.out.println("Apellido: " + persona.getLastName());
->>>>>>> 9213894b337d794404357748b8458911b891e431
+
             System.out.println();
         }
 
