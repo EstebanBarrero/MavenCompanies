@@ -5,17 +5,17 @@ import enums.TypeJob;
 
 import java.util.List;
 
-class Empleado {
+public class Employee {
 
     @JsonProperty("cargo")
     private TypeJob typeJob;
     @JsonProperty("lista_personas_cargo")
     private List<Person> lista_personas_cargo;
 
-    public Empleado() {
+    public Employee() {
     }
 
-    public Empleado(TypeJob typeJob, List<Person> lista_personas_cargo) {
+    public Employee(TypeJob typeJob, List<Person> lista_personas_cargo) {
         this.typeJob = typeJob;
         this.lista_personas_cargo = lista_personas_cargo;
     }

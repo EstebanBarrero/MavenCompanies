@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-class Campus {
+public class Campus {
 
     @JsonProperty("nombre_sede")
     String nombre_sede;
@@ -13,7 +13,7 @@ class Campus {
     @JsonProperty("sede_principal")
     String sede_principal;
     @JsonProperty("lista_empleados_sede")
-    List<Empleado> lista_empleados_sede;
+    List<Employee> lista_empleados_sede;
 
     //constructor vacío
     public Campus() {
@@ -52,16 +52,16 @@ class Campus {
         this.sede_principal = sede_principal;
     }
 
-    public List<Empleado> getLista_empleados_sede() {
+    public List<Employee> getLista_empleados_sede() {
         return lista_empleados_sede;
     }
 
-    public void setLista_empleados_sede(List<Empleado> lista_empleados_sede) {
+    public void setLista_empleados_sede(List<Employee> lista_empleados_sede) {
         this.lista_empleados_sede = lista_empleados_sede;
     }
 
     //Getters y setters
-    public void Lista_empleados_sede(Empleado empleados) {
+    public void Lista_empleados_sede(Employee empleados) {
         lista_empleados_sede.add(empleados);
     }
 

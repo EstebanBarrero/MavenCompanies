@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-class Company {
+public class Company {
 
     @JsonProperty("nombre_empresa")
     String nombre_empresa;

@@ -131,23 +131,14 @@ public class MainXML {
                 for (Person persona : personasCargadas) {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
-<<<<<<< HEAD
                     for (Person d : personas) {
                         if (d.getId_persona().equals(persona.getId_persona())) {
-=======
-                    for (Person person : personas) {
-                        if (person.getId_person().equals(persona.getId_person())) {
-                    for (Person d : personas) {
-                        if (d.getId_person().equals(persona.getId_person())) {
->>>>>>> 60d5fe8fd22bf2a48f829a6943b51ab2b8a56cda
                             existe = true;
                             break;
                         }
                     }
                     if (!existe) {
                         personas.add(persona);
-                    }
-                }
                     }
                 }
                 System.out.println("Datos de persona cargados desde el archivo JSON.");
@@ -309,18 +300,9 @@ public class MainXML {
         for (int i = 0; i < personas.size(); i++) {
             Person persona = personas.get(i);
             System.out.println("Índice: " + i);
-<<<<<<< HEAD
             System.out.println("ID: " + persona.getId_persona());
             System.out.println("Nombre: " + persona.getNombre_apellido_persona());
-=======
-            System.out.println("ID: " + persona.getId_person());
-            System.out.println("Nombre: " + persona.getLastName());
-            System.out.println("Apellido: " + persona.getFistName());
-
-            System.out.println("Nombre: " + persona.getFistName());
-            System.out.println("Apellido: " + persona.getLastName());
-
->>>>>>> 60d5fe8fd22bf2a48f829a6943b51ab2b8a56cda
+            //System.out.println("Apellido: " + persona.getApellidos());
             System.out.println();
         }
 
@@ -339,12 +321,19 @@ public class MainXML {
             System.out.println("Persona seleccionada:");
             System.out.println("ID: " + personaAModificar.getId_persona());
             System.out.println("Nombre actual: " + personaAModificar.getNombre_apellido_persona());
+            //System.out.println("Apellido actual: " + personaAModificar.getApellidos());
 
             System.out.print("Nuevo nombre: ");
             String nuevoNombre = leerCadenaNoVaciaTexto();
             if (!nuevoNombre.isEmpty()) {
                 personaAModificar.setNombre_apellido_persona(nuevoNombre.toUpperCase());
             }
+
+            /*System.out.print("Nuevo apellido: ");
+            String nuevoApellido = leerCadenaNoVaciaTexto();
+            if (!nuevoApellido.isEmpty()) {
+                personaAModificar.setApellidos(nuevoApellido.toUpperCase());
+            }*/
 
             System.out.println("Persona modificada exitosamente.");
 
