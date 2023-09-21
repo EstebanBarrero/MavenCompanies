@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Personas>
     <Persona>
-        <ID>123454</ID>
-        <Nombre>JUAN IVAN</Nombre>
+        <ID>10023290523</ID>
+        <Nombre>ESTEBAN</Nombre>
+    </Persona>
+    <Persona>
+        <ID>11111111</ID>
+        <Nombre>ESTEBAN</Nombre>
     </Persona>
 </Personas>

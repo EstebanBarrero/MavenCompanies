@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
+    <option id="0">Salir</option>
     <option id="1">PERSONAS</option>
     <option id="2">EMPLEADOS</option>
     <option id="3">SEDES</option>
     <option id="4">EMPRESAS</option>
-    <option id="5">Salir</option>
+
 </menu>

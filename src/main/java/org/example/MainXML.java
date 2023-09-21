@@ -32,6 +32,7 @@ import javax.xml.parsers.DocumentBuilder; // Importa la clase DocumentBuilder, q
 import org.w3c.dom.Document; // Importa la clase Document, que representa un documento XML en el DOM.
 import org.w3c.dom.Element; // Importa la clase Element, que representa un elemento XML en el DOM.
 import org.w3c.dom.NodeList; // Importa la clase NodeList, que se utiliza para trabajar con listas de nodos en el DOM XML.
+import views.View;
 //Document Object Model (Modelo de Objetos de Documento)
 
 public class MainXML {
@@ -41,6 +42,7 @@ public class MainXML {
     private static List<Campus> campusList = new ArrayList<>();
     private static List<Company> companyList = new ArrayList<>();
     private static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+    private static View view = new View();
 
     public static void main(String[] args) {
 
@@ -60,7 +62,7 @@ public class MainXML {
         }));
 
         //TODO REVISAR PORQUE NO SIRVE EL 5 O 0 PARA SALIR DEL MENU
-        int opcion;
+        int opcion, opcionSub;
         do{
             showMenu();
             opcion = leerOpcion();
@@ -70,64 +72,75 @@ public class MainXML {
                     do{
                         typeMenu = "registerPerson.xml";
                         cargarMenuDesdeXML(typeMenu);
-                        int opcionSub = leerOpcion();
+                        opcionSub = leerOpcion();
                         switch (opcionSub) {
                             case 1 -> ver_personas_registradas(); //Ver personas registradas
                             case 2 -> registrar_Persona();  //Registrar_Persona
                             case 3 -> modificar_Persona();//Modificar_Persona
                             case 4 -> eliminar_Persona(); //Eliminar_Persona
-                            case 5 -> System.out.println("¡Hasta luego!");
+                            case 0 -> view.showBye();
+                            default -> System.out.println("Opción no válida. Intente nuevamente");
+                        }
+                    }while (opcionSub != 0);
+                }
+                //TODO CARGAR LOS DATOS DE ORCAR
+                case 2 -> {
+                    typeMenu = "registerEmployee.xml";
+                    cargarMenuDesdeXML(typeMenu);
+                    opcionSub = leerOpcion();
+                    do{
+                        switch (opcionSub) {
+                            case 1 -> ver_personas_registradas(); //Ver personas registradas
+                            //case 2 -> ();  //Registrar_Empleado
+                            //case 3 -> ();//Modificar_Persona
+                            case 4 -> eliminarSede(); //Eliminar_Persona
+                            case 0 -> view.showBye();
                             default -> System.out.println("Opción no válida. Intente nuevamente.");
                         }
-                    }while (opcion != 5);
+                    }while (opcionSub != 0);
                 }
                 case 3 -> {
+                    typeMenu = "registerCampus.xml";
+                    cargarMenuDesdeXML(typeMenu);
+                    opcionSub = leerOpcion();
                     do{
-                        typeMenu = "registerCampus.xml";
-                        cargarMenuDesdeXML(typeMenu);
-                        opcion = leerOpcion();
-                        switch (opcion) {
+                        switch (opcionSub) {
                             case 1 -> verSedesRegistradas(); //Ver personas registradas
                             case 2 -> registrarSede();  //Registrar_Persona
                             case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
                             case 4 -> eliminarSede(); //Eliminar_Persona
-                            case 5 -> System.out.println("¡Hasta luego!");
+                            case 0 -> view.showBye();
                             default -> System.out.println("Opción no válida. Intente nuevamente.");
                         }
-                    }while (opcion != 5);
+                    }while (opcionSub != 0);
                 }
+
+                case 4 -> {
+                    typeMenu = "registerCompany.xml";
+                    cargarMenuDesdeXML(typeMenu);
+                    opcionSub = leerOpcion();
+                    do{
+                        switch (opcionSub) {
+                            case 1 -> verEmpresasRegistradas(); //Ver personas registradas
+                            case 2 -> registrarEmpresa();  //Registrar_Empleado
+                            case 3 -> modificarEmpresa();//Modificar_Persona
+                            case 4 -> eliminarEmpresa(); //Eliminar_Persona
+                            case 0 -> view.showBye();
+                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                        }
+                    }while (opcionSub != 0);
+                }
+                case 0 ->
+                        view.showBye();
+                default ->
+                        System.out.println("Opción no válida. Intente nuevamente.");
+
             }
 
-        }while (opcion != 5);
+        }while (opcion != 0);
         guardarEmpresasEnArchivo_json();
         guardarSedesEnArchivo_json();
         guardarPersonasEnArchivo_json();
-
-
-
-        int opcion2;
-
-        do {
-            //cargarMenuDesdeXML(typeMenu);
-            opcion = leerOpcion();
-
-            switch (opcion) {
-                /*TODO ESTO ES DE PERSONAS
-                case 1 -> ver_personas_registradas(); //Ver personas registradas
-                case 2 -> registrar_Persona();  //Registrar_Persona
-                case 3 -> modificar_Persona();//Modificar_Persona
-                case 4 -> eliminar_Persona(); //Eliminar_Persona*/
-                case 1 -> verSedesRegistradas(); //Ver personas registradas
-                case 2 -> registrarSede();  //Registrar_Persona
-                case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
-                case 4 -> eliminarSede(); //Eliminar_Persona
-
-                case 5 -> System.out.println("¡Hasta luego!");
-                default -> System.out.println("Opción no válida. Intente nuevamente.");
-            }
-
-        } while (opcion != 5);
-
 // Llamado a los métodos para guardar los datos antes de salir
 
 
@@ -154,7 +167,7 @@ public class MainXML {
             System.out.println("=== MENÚ EN/ES ===");
             for (int i = 0; i < options.getLength(); i++) {
                 Element option = (Element) options.item(i);
-                System.out.println((i + 1) + ". " + option.getTextContent());
+                System.out.println((i) + ". " + option.getTextContent());
             }
         } catch (Exception e) {
             System.out.println("Error al cargar el menú desde el archivo XML.");
@@ -185,7 +198,7 @@ public class MainXML {
             System.out.println("=== MENÚ EN/ES ===");
             for (int i = 0; i < options.getLength(); i++) {
                 Element option = (Element) options.item(i);
-                System.out.println((i + 1) + ". " + option.getTextContent());
+                System.out.println((i) + ". " + option.getTextContent());
             }
         } catch (Exception e) {
             System.out.println("Error al cargar el menú desde el archivo XML.");

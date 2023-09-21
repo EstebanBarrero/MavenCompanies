@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menu>
+    <option id="0">Salir</option>
+    <option id="1">Ver Empresas registradas</option>
+    <option id="2">Registrar Empresas</option>
+    <option id="3">Modificar Empresas</option>
+    <option id="4">Eliminar Empresas</option>
+</menu>
