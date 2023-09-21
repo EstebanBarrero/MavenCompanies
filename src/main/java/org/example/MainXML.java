@@ -16,10 +16,8 @@ import java.io.File; // Importa la clase File, que se utiliza para trabajar con 
 import javax.xml.parsers.ParserConfigurationException; // Importa la clase ParserConfigurationException, que se utiliza para manejar excepciones relacionadas con la configuración del analizador XML.
 import javax.xml.transform.TransformerException; // Importa la clase TransformerException, que se utiliza para manejar excepciones relacionadas con la transformación de XML.
 
-import models.Campus;
-import models.Company;
-import models.Employee;
-import models.Person;
+import enums.TypeJob;
+import models.*;
 import org.w3c.dom.DOMException; // Importa la clase DOMException, que se utiliza para manejar excepciones relacionadas con el Document Object Model (DOM) de XML.
 import javax.xml.transform.Transformer; // Importa la clase Transformer, que se utiliza para transformar documentos XML.
 import javax.xml.transform.TransformerFactory; // Importa la clase TransformerFactory, que se utiliza para crear instancias de Transformer.
@@ -62,13 +60,13 @@ public class MainXML {
         int opcion;
 
         do {
-            cargarMenuDesdeXML();
+            cargarMenuDesdeXML("registerEmployee.xml");
             opcion = leerOpcion();
 
             switch (opcion) {
-                case 1 -> ver_personas_registradas(); //Ver personas registradas
-                case 2 -> registrar_Persona();  //Registrar_Persona
-                case 3 -> modificar_Persona();//Modificar_Persona
+                case 1 -> verEmpleadosRegistrados(); //Ver personas registradas
+                case 2 -> registrarEmpleados();//Registrar_Persona
+                case 3 -> modificarEmpleado();//Modificar_Persona
                 case 4 -> eliminar_Persona(); //Eliminar_Persona
 
                 case 0 -> System.out.println("¡Hasta luego!");
@@ -77,7 +75,8 @@ public class MainXML {
 
         } while (opcion != 0);
 
-// Llamado a los métodos para guardar los datos antes de salir
+
+    // Llamado a los métodos para guardar los datos antes de salir
         guardarEmpresasEnArchivo_json();
         guardarSedesEnArchivo_json();
         guardarPersonasEnArchivo_json();
@@ -92,10 +91,10 @@ public class MainXML {
      * consola. Si se produce un error durante el proceso de lectura o análisis,
      * muestra un mensaje de error.
      */
-    private static void cargarMenuDesdeXML() {
+    private static void cargarMenuDesdeXML(String typeMenu) {
         try {
 // Crear un objeto File que representa el archivo "menu.xml"
-            File menuFile = new File("registerPerson.xml");
+            File menuFile = new File(typeMenu);
 // Crear una instancia de DocumentBuilderFactory para configurar el analizador XML
             DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 // Crear un objeto DocumentBuilder para analizar el contenido XML
@@ -114,6 +113,7 @@ public class MainXML {
             System.out.println("Error al cargar el menú desde el archivo XML.");
         }
     }
+
 
     /**
      * Este método se utiliza para guardar la lista de empresas en un archivo
@@ -547,8 +547,6 @@ public class MainXML {
             if (sedePrincipalYaElegida) {
                 System.out.println("Ya se ha elegido otra sede principal para la empresa seleccionada");
             } else {
-                //TODO CORREGIR ESTA SENTENCIA
-                //sedeSeleccionada.sede_principal = "S";
                 sedeSeleccionada.setSede_principal("S");
                 System.out.println("sede seleccionada como sede ppal de la empresa");
                 guardarEmpresasEnArchivo_json();
@@ -591,14 +589,10 @@ public class MainXML {
         // Cambiar- actualizar la sede pincipal de la empresa
         for (Campus sede : empresaSeleccionada.getLista_sedes_empresa()) {
             if ("S".equals(sede.getSede_principal())) {
-                //TODO CORREGIR LA SENTECIA COMENTADA
-                //sede.sede_principal = "N";
                 sede.setNombre_sede("N");
                 break;
             }
         }
-        //TODO CORREGIR LA SENTECIA COMENTADA
-        //nuevaSedePrincipal.sede_principal = "S";
         nuevaSedePrincipal.setSede_principal("S");
         System.out.println("Sede actualizada/ seleccionada como sede principal de la empresa.");
         guardarEmpresasEnArchivo_json();
@@ -705,6 +699,161 @@ public class MainXML {
             System.out.println("No se pudo cargar los datos de empleados desde el archivo JSON.");
         }
     }
+
+    private static void verPersonasRegistradas() {
+        System.out.println("=== Personas Registradas ===");
+
+        // Verificar si hay personas registradas
+        if (personList.isEmpty()) {
+            System.out.println("No hay personas registradas.");
+        } else {
+            int index = 0;
+            for (Person persona : personList) {
+                System.out.println("Índice " + index + ": " + persona);
+                index++;
+            }
+        }
+    }
+
+    public static String jobTitles(){
+        System.out.println("=== CARGOS DISPONIBLES ===\n1. " + TypeJob.DIRECTIVO + "(D)" + "\n2. " + TypeJob.ASISTENCIAL + "(A)" + "\n3. " + TypeJob.OPERATIVO + "(O)" +
+                "\nIngrese el número del cargo en el que desea registrar a la persona: ");
+        int indexJobTitle = leerIndiceValido(TypeJob.values().length);
+        String jobTitle = "";
+        switch (indexJobTitle){
+            case 1 -> jobTitle = String.valueOf(TypeJob.DIRECTIVO);
+            case 2 -> jobTitle = String.valueOf(TypeJob.OPERATIVO);
+            case 3 -> jobTitle = String.valueOf(TypeJob.ASISTENCIAL);
+            default -> System.out.println("Por favor ingrese un valor valido (1, 2, 3)");
+        }
+        return jobTitle;
+    }
+
+
+
+
+    private static void registrarEmpleados() {
+        System.out.println("=== Registrar Empleado ===");
+
+        // Verificar si hay personas registradas
+        if (personList.isEmpty()) {
+            System.out.println("No hay personas registradas. Registre al menos una persona antes de crear un empleado.");
+            return;
+        }
+
+        System.out.println("Personas registradas:");
+        for (int i = 0; i < personList.size(); i++) {
+            System.out.println((i + 1) + ". " + personList.get(i).getNombre_apellido_persona());
+        }
+
+        // Obtener la selección de la persona asociada al cargo
+        System.out.print("Seleccione una persona de la lista (1-" + personList.size() + "): ");
+        int opcionPersona = leerOpcion();
+
+        // Validar la selección de persona
+        if (opcionPersona < 1 || opcionPersona > personList.size()) {
+            System.out.println("Selección de persona no válida. Por favor, seleccione una persona válida.");
+            return;
+        }
+
+        // Obtener la persona seleccionada
+        Person personaSeleccionada = personList.get(opcionPersona - 1);
+
+        // Verificar si la persona ya está asociada como empleado al mismo cargo
+        boolean personaAsociada = false;
+        TypeJob cargoSeleccionado = TypeJob.valueOf(jobTitles());
+
+        for (Employee empleado : employeeList) {
+            if (empleado.getTypeJob() == cargoSeleccionado) {
+                empleado.getLista_personas_cargo().add(personaSeleccionada);
+                System.out.println("Persona registrada exitosamente como empleado.");
+                guardarEmpleadosEnArchivo_json();
+                personaAsociada = true;
+                break; // Salir del bucle una vez que la persona haya sido asociada al cargo.
+            }
+        }
+
+        // Si no se encontró un empleado con el mismo cargo, se crea uno nuevo
+        if (!personaAsociada) {
+            Employee nuevoEmpleado = new Employee(cargoSeleccionado, new ArrayList<>());
+            nuevoEmpleado.getLista_personas_cargo().add(personaSeleccionada);
+            employeeList.add(nuevoEmpleado);
+            System.out.println("Empleado registrado exitosamente.");
+            guardarEmpleadosEnArchivo_json();
+        }
+    }
+
+    private static void verEmpleadosRegistrados() {
+        System.out.println("=== Empleados Registrados ===");
+
+        // Verificar si hay empleados registrados
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+
+        // Recorrer la lista de empleados y mostrar sus detalles
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee empleado = employeeList.get(i);
+            System.out.println("Empleado :");
+            System.out.println("Cargo: " + empleado.getTypeJob());
+
+            List<Person> personasAsociadas = empleado.getLista_personas_cargo();
+            System.out.println("Personas asociadas al cargo:");
+            for (int j = 0; j < personasAsociadas.size(); j++) {
+                Person persona = personasAsociadas.get(j);
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+            }
+
+            System.out.println();
+        }
+    }
+
+    private static void modificarEmpleado() {
+        System.out.println("=== Modificar Empleado ===");
+
+        // Mostrar la lista de empleados registrados con índices
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee empleado = employeeList.get(i);
+            System.out.println("Índice: " + i);
+            System.out.println("Cargo: " + empleado.getTypeJob());
+            System.out.println("Nombre del empleado: " + empleado.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+            System.out.println();
+        }
+
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+
+        System.out.print("Ingrese el índice del empleado que desea modificar: ");
+        int indiceSeleccionado = leerIndicePersona();
+
+        // Verificar que el índice esté dentro del rango válido
+        if (indiceSeleccionado >= 0 && indiceSeleccionado < employeeList.size()) {
+            Employee empleadoAModificar = employeeList.get(indiceSeleccionado);
+
+            System.out.println("Empleado seleccionado:");
+            System.out.println("Cargo actual: " + empleadoAModificar.getTypeJob());
+            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+
+            System.out.print("Nuevo cargo: ");
+            String nuevoCargo = leerCadenaNoVaciaTexto();
+            if (!nuevoCargo.isEmpty()) {
+                empleadoAModificar.setTypeJob(TypeJob.valueOf(nuevoCargo));
+            }
+
+            System.out.println("Empleado modificado exitosamente.");
+
+            // Llamar a la función para guardar los empleados en un archivo JSON después de la modificación
+            guardarEmpleadosEnArchivo_json();
+        } else {
+            System.out.println("Índice no válido. No se realizó ninguna modificación.");
+        }
+    }
+
 
     ///////////////////
     private static void guardarPersonasEnArchivo_json() {
@@ -1025,6 +1174,8 @@ public class MainXML {
                     System.out.println("Error al guardar los datos de persona en el archivo XML.");
                 }
             }
+
+
 
 }
 

@@ -2,4 +2,8 @@
   "id_persona" : "123454",
   "nombre_apellido_persona" : "JUAN IVAN",
   "empleado_jefe" : "ROJAS"
+}, {
+  "id_persona" : "123212",
+  "nombre_apellido_persona" : "ESTEBAN DAVID",
+  "empleado_jefe" : "PUENTES"
 } ]

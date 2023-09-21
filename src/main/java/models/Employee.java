@@ -36,8 +36,6 @@ public class Employee {
         this.lista_personas_cargo = lista_personas_cargo;
     }
 
-
-
     public void Lista_personas_cargo(Person persona) {
         lista_personas_cargo.add(persona);
     }
@@ -53,5 +51,6 @@ public class Employee {
         }
         return builder.toString();
     }
+
 
 }
