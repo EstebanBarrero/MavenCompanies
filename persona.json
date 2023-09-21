@@ -1,1 +1,5 @@
-[ ]
+[ {
+  "id_persona" : "123454",
+  "nombre_apellido_persona" : "JUAN IVAN",
+  "empleado_jefe" : "ROJAS"
+} ]

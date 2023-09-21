@@ -292,10 +292,8 @@ public class MainXML {
                 System.out.println("No se permiten campos vacíos. Intente nuevamente.");
             }
         }
-        // Actualizar los datos de la empresa con los valores nuevos
-        //TODO CORREGIR EL ERROR DE LAS SENTENCIAS COMENTADAS
-        //empresaSeleccionada.nombre_empresa = nuevoNombreEmpresa;
-        //empresaSeleccionada.codigo_empresa = nuevoCodigoEmpresa;
+        empresaSeleccionada.setNombre_empresa(nuevoNombreEmpresa);
+        empresaSeleccionada.setCodigo_empresa(nuevoCodigoEmpresa);
         System.out.println("Empresa modificado exitosamente.");
         guardarEmpresasEnArchivo_json();
 
@@ -551,6 +549,7 @@ public class MainXML {
             } else {
                 //TODO CORREGIR ESTA SENTENCIA
                 //sedeSeleccionada.sede_principal = "S";
+                sedeSeleccionada.setSede_principal("S");
                 System.out.println("sede seleccionada como sede ppal de la empresa");
                 guardarEmpresasEnArchivo_json();
 
@@ -594,11 +593,13 @@ public class MainXML {
             if ("S".equals(sede.getSede_principal())) {
                 //TODO CORREGIR LA SENTECIA COMENTADA
                 //sede.sede_principal = "N";
+                sede.setNombre_sede("N");
                 break;
             }
         }
         //TODO CORREGIR LA SENTECIA COMENTADA
         //nuevaSedePrincipal.sede_principal = "S";
+        nuevaSedePrincipal.setSede_principal("S");
         System.out.println("Sede actualizada/ seleccionada como sede principal de la empresa.");
         guardarEmpresasEnArchivo_json();
 
