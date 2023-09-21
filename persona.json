@@ -6,4 +6,8 @@
   "id_persona" : "11111111",
   "nombre_apellido_persona" : "ESTEBAN",
   "empleado_jefe" : "BARRERO"
+}, {
+  "id_persona" : "1002329052",
+  "nombre_apellido_persona" : "ESTEBAN",
+  "empleado_jefe" : "PUENTES"
 } ]

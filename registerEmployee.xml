@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <menu>
     <option id="0">Salir</option>
-    <option id="1">Ver personas registradas</option>
-    <option id="2">Registrar Persona</option>
-    <option id="3">Modificar Persona</option>
-    <option id="4">Eliminar Persona</option>
+    <option id="1">Ver Empleados registradas</option>
+    <option id="2">Registrar Empleados</option>
+    <option id="3">Modificar Empleados</option>
+    <option id="4">Eliminar Empleados</option>
 
 </menu>

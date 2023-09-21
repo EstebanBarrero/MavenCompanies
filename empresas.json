@@ -1,1 +1,5 @@
-[ ]
+[ {
+  "nombre_empresa" : "SOFTBIT",
+  "codigo_empresa" : "01",
+  "lista_sedes_empresa" : [ ]
+} ]

@@ -8,4 +8,9 @@
   "codigo_sede" : "05",
   "sede_principal" : "N",
   "lista_empleados_sede" : [ ]
+}, {
+  "nombre_sede" : "POLO",
+  "codigo_sede" : "50",
+  "sede_principal" : "N",
+  "lista_empleados_sede" : [ ]
 } ]
