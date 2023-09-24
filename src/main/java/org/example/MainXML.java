@@ -1076,11 +1076,11 @@ public class MainXML {
     private static void eliminarEmpleado() {
         System.out.println("=== Eliminar Registro de empleados ===");
         if (employeeList.isEmpty()) {
-            System.out.println("No hay sedes registradas.");
+            System.out.println("No hay empleados registrados.");
             return;
         }
         verEmpleadosRegistrados();
-        System.out.print("Ingrese el índice de la sede que desea eliminar: ");
+        System.out.print("Ingrese el índice del empleado que desea eliminar: ");
         int indice = leerIndiceValido(employeeList.size());
         employeeList.remove(indice);
         System.out.println("empleado eliminado exitosamente.");
