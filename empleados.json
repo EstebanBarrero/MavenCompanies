@@ -1,1 +1,19 @@
-[ ]
+[ {
+  "cargo" : "ASISTENCIAL",
+  "lista_personas_cargo" : [ {
+    "id_persona" : "11111111",
+    "nombre_apellido_persona" : "ESTEBAN",
+    "empleado_jefe" : "BARRERO"
+  }, {
+    "id_persona" : "23421",
+    "nombre_apellido_persona" : "JUAN ROJAS",
+    "empleado_jefe" : "BELTRAN"
+  } ]
+}, {
+  "cargo" : "DIRECTIVO",
+  "lista_personas_cargo" : [ {
+    "id_persona" : "31321",
+    "nombre_apellido_persona" : "DAVID",
+    "empleado_jefe" : "JIMENEX"
+  } ]
+} ]

@@ -1,13 +1,13 @@
 [ {
-  "id_persona" : "10023290523",
-  "nombre_apellido_persona" : "ESTEBAN",
-  "empleado_jefe" : "BARRERO"
-}, {
   "id_persona" : "11111111",
   "nombre_apellido_persona" : "ESTEBAN",
   "empleado_jefe" : "BARRERO"
 }, {
-  "id_persona" : "1002329052",
-  "nombre_apellido_persona" : "ESTEBAN",
-  "empleado_jefe" : "PUENTES"
+  "id_persona" : "23421",
+  "nombre_apellido_persona" : "JUAN ROJAS",
+  "empleado_jefe" : "BELTRAN"
+}, {
+  "id_persona" : "31321",
+  "nombre_apellido_persona" : "DAVID",
+  "empleado_jefe" : "JIMENEX"
 } ]
