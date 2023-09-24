@@ -4,6 +4,7 @@
     <option id="1">Ver Empleados registradas</option>
     <option id="2">Registrar Empleados</option>
     <option id="3">Modificar Empleados</option>
-    <option id="4">Eliminar Empleados</option>
+    <option id="4">Desasociar empleado_persona</option>
+    <option id="5">Eliminar Empleados</option>
 
 </menu>
