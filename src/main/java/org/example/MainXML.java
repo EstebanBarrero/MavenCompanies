@@ -59,7 +59,7 @@ public class MainXML {
             guardarSedesEnArchivo_json();
             guardarPersonasEnArchivo_json();
             guardarEmpleadosEnArchivo_json();
-            System.out.println("Guardando datos antes de salir...");
+            view.messageSaveDate();
         }));
 
         int opcion, opcionSub;
@@ -96,7 +96,7 @@ public class MainXML {
                             case 4 -> desasociarEmpleadoPersona();
                             case 5 -> eliminarEmpleado(); //Eliminar_Persona
                             case 0 -> view.showBye();
-                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                            default -> view.messageNotValidated();
                         }
                     }while (opcionSub != 0);
                 }
@@ -111,7 +111,7 @@ public class MainXML {
                             case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
                             case 4 -> eliminarSede(); //Eliminar_Persona
                             case 0 -> view.showBye();
-                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                            default -> view.messageNotValidated();
                         }
                     }while (opcionSub != 0);
                 }
@@ -131,14 +131,14 @@ public class MainXML {
                             case 6 -> desasociarSedeEmpresa();
                             case 7 -> ver__Sedes_Empresa();
                             case 8 -> elegir_sede_principal_empresa();
-                            default -> System.out.println("Opción no válida. Intente nuevamente.");
+                            default -> view.messageNotValidated();
                         }
                     }while (opcionSub != 0);
                 }
                 case 0 ->
                         view.showBye();
                 default ->
-                        System.out.println("Opción no válida. Intente nuevamente.");
+                        view.messageNotValidated();
 
             }
         }while (opcion != 0);
@@ -174,7 +174,7 @@ public class MainXML {
                 System.out.println((i) + ". " + option.getTextContent());
             }
         } catch (Exception e) {
-            System.out.println("Error al cargar el menú desde el archivo XML.");
+            view.errorMesageXMl();
         }
     }
 
@@ -205,7 +205,7 @@ public class MainXML {
                 System.out.println((i) + ". " + option.getTextContent());
             }
         } catch (Exception e) {
-            System.out.println("Error al cargar el menú desde el archivo XML.");
+           view.errorMesageXMl();
         }
     }
 
@@ -224,10 +224,10 @@ public class MainXML {
             // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
             // Luego, se escribe la lista de departamentos en el archivo JSON.
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), companyList);
-            System.out.println("Datos de Empresa guardados en el archivo JSON.");  // Se muestra un mensaje de éxito en la consola.
+            view.dateArchiveCompany(); // Se muestra un mensaje de éxito en la consola.
 
         } catch (IOException e) {  // En caso de error, se muestra un mensaje de error en la consola.
-            System.out.println("Error al guardar los datos de Empresa en el archivo JSON.");
+           view.errorSaveDateJson();
         }
     }
 
@@ -257,20 +257,20 @@ public class MainXML {
                     }
                 }
 
-                System.out.println("Datos de Empresa cargados desde el archivo JSON.");
+                view.loadArchiveCompany();
             } else {
-                System.out.println("El archivo 'empresas.json' no existe.");
+                view.notFoundArchiveCompany();
             }
         } catch (IOException e) {
-            System.out.println("No se pudo cargar los datos de empresas desde el archivo JSON.");
+           view.errorLoadArchiveCompany();
         }
     }
 
     private static void verEmpresasRegistradas() {
         if (companyList.isEmpty()) {                                        //Verifica si la lista está vacía
-            System.out.println("No hay empresas registradas");
+           view.notRegisterCompany();
         } else {
-            System.out.println("=== Empresas Registrados ===");
+            view.companyRegister();
             int index = 0;
             for (Company empresa : companyList) {                     //bucle for-each que recorre la lista
                 System.out.println("Índice " + index + ": " + empresa);
@@ -280,7 +280,7 @@ public class MainXML {
     }
 
     private static void registrarEmpresa() {
-        System.out.println("=== Registrar Empresa ===");
+        view.registerCompany();
 
         // Declaración de variables para almacenar los datos del país
         String nombre_empresa = null;
@@ -288,26 +288,26 @@ public class MainXML {
         // Ciclo para validar y registrar los datos
         while (true) {
             if (nombre_empresa == null) {
-                System.out.print("nombre empresa: ");
+                view.messageNameCompany();
                 nombre_empresa = leerCadenaNoVaciaTexto().toUpperCase();
 
                 // Validar si el pais ya está registrado por nombre
                 for (Company empresa : companyList) {
                     if (empresa.getNombre_empresa().equalsIgnoreCase(nombre_empresa)) {
-                        System.out.println("la empresa con este nombre ya está registrada.");
+                        view.messageCompanyRegister();
                         nombre_empresa = null; // Reiniciar para volver a pedir el dato
                         break;
                     }
                 }
             } // Si el codigo del pais aún no se ha ingresado
             else if (codigo_empresa == null) {
-                System.out.print("código empresa: ");
+                view.messageCodeCompany();
                 codigo_empresa = leerCodigoNumerico();
 
                 // Validar si el pais ya está registrado por código
                 for (Company empresa : companyList) {
                     if (empresa.getCodigo_empresa().equals(codigo_empresa)) {
-                        System.out.println("La empresa con este código ya está registrada");
+                        view.messageCompanyRegister();
                         codigo_empresa = null; // Reiniciar para volver a pedir el dato
                         break;
                     }
@@ -316,7 +316,7 @@ public class MainXML {
             // Si se han ingresado todos los datos requeridos, registrar el país
             if (nombre_empresa != null && codigo_empresa != null) {
                 companyList.add(new Company(nombre_empresa, codigo_empresa));
-                System.out.println("Empresa registrada exitosamente.");
+                view.messageRegisterTrue();
                 guardarEmpresasEnArchivo_json();
                 break; // Salir del bucle en caso de éxito
             }
@@ -324,18 +324,18 @@ public class MainXML {
     }
 
     private static void modificarEmpresa() {
-        System.out.println("=== Modificar Registro de Empresa ===");
+        view.messageModifyCompany();
 
         // Verificar si hay empresas registrados
         if (companyList.isEmpty()) {
-            System.out.println("No hay empresas registrados.");
+            view.notRegisterCompany();
             return;
         }
 
         // Mostrar la lista de empresas registrados
         verEmpresasRegistradas();
 
-        System.out.print("Ingrese el índice de la empresa que desea modificar: ");
+        view.messageIndexCompany();
         int indice = leerIndiceValido(companyList.size());
         Company empresaSeleccionada = companyList.get(indice);
 
@@ -351,7 +351,7 @@ public class MainXML {
             if (!input.isEmpty()) {
                 for (Company empresa : companyList) {
                     if (empresa.getNombre_empresa().equals(input) && !empresa.getNombre_empresa().equals(nuevoNombreEmpresa)) {
-                        System.out.println("La empresa con este nombre ya está registrada");
+                        view.messageCompanyRegister();
                         nombreEmpresaRegistrada = true;
                         break;
                     }
@@ -361,7 +361,7 @@ public class MainXML {
                     break;
                 }
             } else {
-                System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+                view.notCamposVacio();
             }
         }
 
@@ -373,7 +373,7 @@ public class MainXML {
             if (!input.isEmpty()) {
                 for (Company empresa : companyList) {
                     if (empresa.getCodigo_empresa().equals(input) && !empresa.getCodigo_empresa().equals(nuevoCodigoEmpresa)) {
-                        System.out.println("La empresa con este código ya está registrada");
+                     view.messageCompanyRegister();
                         codigoEmpresaRegistrada = true;
                         break;
                     }
@@ -383,35 +383,35 @@ public class MainXML {
                     break;
                 }
             } else {
-                System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+             view.notCamposVacio();
             }
         }
         empresaSeleccionada.setNombre_empresa(nuevoNombreEmpresa);
         empresaSeleccionada.setCodigo_empresa(nuevoCodigoEmpresa);
-        System.out.println("Empresa modificado exitosamente.");
+        view.modifyCompanyTrue();
         guardarEmpresasEnArchivo_json();
 
     }
 
     private static void eliminarEmpresa() {
-        System.out.println("=== Eliminar Registro de Empresa ===");
+        view.messageDeleteCompany();
         if (companyList.isEmpty()) {
-            System.out.println("No hay empresas registrados.");
+           view.notRegisterCompany();
             return;
         }
         verEmpresasRegistradas();
-        System.out.print("Ingrese el índice de la empresa que desea eliminar: ");
+        view.messageIndexCompanyDelete();
         int indice = leerIndiceValido(companyList.size());
         companyList.remove(indice);
-        System.out.println("empresa eliminada exitosamente.");
+        view.companyDeleteTrue();
         guardarEmpresasEnArchivo_json();
     }
 
     private static void verSedesRegistradas() {
         if (campusList.isEmpty()) {
-            System.out.println("No hay sedes registradas.");
+          view.notCampusRegister();
         } else {
-            System.out.println("=== sedes Registradas ===");
+           view.messageRegisterCampus();
             int index = 0;
             for (Campus sede : campusList) {                     //bucle for-each que recorre la lista
                 System.out.println("Índice " + index + ": " + sede);
@@ -421,7 +421,7 @@ public class MainXML {
     }
 
     private static void registrarSede() {
-        System.out.println("=== Registrar sede ===");
+        view.campusRegister();
 
         // Declaración de variables para almacenar los datos
         String nombre_sede = null;
@@ -436,7 +436,7 @@ public class MainXML {
                 // Validar si el  ya está registrado por nombre
                 for (Campus sede : campusList) {
                     if (sede.getNombre_sede().equalsIgnoreCase(nombre_sede)) {
-                        System.out.println("la sede con este nombre ya está registrado.");
+                        view.messageCampusRegister();
                         nombre_sede = null; // Reiniciar para volver a pedir el dato
                         break;
                     }
@@ -449,7 +449,7 @@ public class MainXML {
                 // Validar si la sede ya está registrado por código
                 for (Campus sede : campusList) {
                     if (sede.getCodigo_sede().equals(codigo_sede)) {
-                        System.out.println("La sede con este código ya está registrada");
+                        view.messageCampusRegister();
                         codigo_sede = null; // Reiniciar para volver a pedir el dato
                         break;
                     }
@@ -469,7 +469,7 @@ public class MainXML {
     private static void eliminarSede() {
         System.out.println("=== Eliminar Registro de sedes ===");
         if (campusList.isEmpty()) {
-            System.out.println("No hay sedes registradas.");
+            view.notCampusRegister();
             return;
         }
         verSedesRegistradas();
