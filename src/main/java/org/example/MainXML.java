@@ -842,7 +842,6 @@ public class MainXML {
             System.out.println("No se pudo cargar los datos de personas desde el archivo JSON.");
         }
     }
-
     private static void registrarEmpleados() {
         System.out.println("=== Registrar Empleado ===");
 
@@ -1001,7 +1000,6 @@ public class MainXML {
         }
         return jobTitle;
     }
-
 
     /*private static void mostrarMenu() {                         // mostrar opciones menú
         System.out.println("=== MENÚ - REGISTRO DE PERSONAS EN/ES===");
