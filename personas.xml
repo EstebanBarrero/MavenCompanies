@@ -1,15 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Personas>
     <Persona>
-        <ID>10023290523</ID>
-        <Nombre>ESTEBAN</Nombre>
-    </Persona>
-    <Persona>
-        <ID>11111111</ID>
-        <Nombre>ESTEBAN</Nombre>
-    </Persona>
-    <Persona>
-        <ID>1002329052</ID>
-        <Nombre>ESTEBAN</Nombre>
+        <ID>100</ID>
+        <Nombre>ESTEBA</Nombre>
     </Persona>
 </Personas>
