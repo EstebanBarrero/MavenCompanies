@@ -4,10 +4,7 @@
  */
 package models;
 
-/**
- *
- * @author USUARIO
- */
+
 public class JobTitle {
         private String nameJobTitle;
 
