@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <Personas>
     <Persona>
+<<<<<<< HEAD
         <ID>05</ID>
         <Nombre>ESTEBAN BARRERO</Nombre>
+=======
+        <ID>11111111</ID>
+        <Nombre>ESTEBAN</Nombre>
+    </Persona>
+    <Persona>
+        <ID>23421</ID>
+        <Nombre>JUAN ROJAS</Nombre>
+    </Persona>
+    <Persona>
+        <ID>31321</ID>
+        <Nombre>DAVID</Nombre>
+        <ID>023</ID>
+        <Nombre>DAVID ESTEBAN</Nombre>
+>>>>>>> 6cb0b6a0574af32ae10b956dae321e79df9b0267
     </Persona>
 </Personas>

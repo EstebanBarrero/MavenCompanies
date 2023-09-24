@@ -62,4 +62,105 @@ public class View {
     public void showInvalidateOption() {
         System.out.println("Opción no válida. Intente nuevamente.");
     }
+
+    public void messageSaveDate(){
+        System.out.println("Guardando datos antes de salir...");
+    }
+
+    public void messageNotValidated(){
+        System.out.println("Opción no válida. Intente nuevamente.");
+    }
+    public void errorMesageXMl(){
+        System.out.println("Error al cargar el menú desde el archivo XML.");
+    }
+
+    public void errorSaveDateJson(){
+        System.out.println("Error al guardar los datos de Empresa en el archivo JSON.");
+    }
+
+    public void dateArchiveCompany(){
+        System.out.println("Datos de Empresa guardados en el archivo JSON.");
+    }
+
+    public void loadArchiveCompany(){
+        System.out.println("Datos de Empresa cargados desde el archivo JSON.");
+    }
+
+    public void errorLoadArchiveCompany(){
+        System.out.println("No se pudo cargar los datos de empresas desde el archivo JSON.");
+    }
+
+    public void notFoundArchiveCompany(){
+        System.out.println("El archivo 'empresas.json' no existe.");
+    }
+
+    public void notRegisterCompany(){
+        System.out.println("No hay empresas registradas");
+    }
+    public void companyRegister(){
+        System.out.println("=== Empresas Registrados ===");
+    }
+    public void registerCompany(){
+        System.out.println("=== Registrar Empresa ===");
+    }
+
+    public void messageNameCompany(){
+        System.out.println("nombre empresa: ");
+    }
+
+    public void messageCompanyRegister(){
+        System.out.println("la empresa con este dato ya está registrada.");
+    }
+
+    public void messageCodeCompany(){
+        System.out.println("código empresa: ");
+    }
+
+    public void messageRegisterTrue(){
+        System.out.println("Empresa registrada exitosamente.");
+    }
+
+    public void messageModifyCompany(){
+        System.out.println("=== Modificar Registro de Empresa ===");
+    }
+
+    public void messageIndexCompany(){
+        System.out.println("Ingrese el índice de la empresa que desea modificar: ");
+    }
+
+    public void notCamposVacio(){
+        System.out.println("No se permiten campos vacíos. Intente nuevamente.");
+    }
+
+    public void modifyCompanyTrue(){
+        System.out.println("Empresa modificado exitosamente.");
+    }
+
+    public void messageDeleteCompany(){
+        System.out.println("=== Eliminar Registro de Empresa ===");
+    }
+
+    public void messageIndexCompanyDelete(){
+        System.out.println("Ingrese el índice de la empresa que desea eliminar: ");
+    }
+
+    public void companyDeleteTrue(){
+        System.out.println("empresa eliminada exitosamente.");
+    }
+
+    public void notCampusRegister(){
+        System.out.println("No hay sedes registradas.");
+    }
+
+    public void messageRegisterCampus(){
+        System.out.println("=== sedes Registradas ===");
+    }
+
+    public void campusRegister(){
+        System.out.println("=== Registrar sede ===");
+    }
+
+    public void messageCampusRegister(){
+        System.out.println("la sede con este dato ya está registrado.");
+    }
 }
