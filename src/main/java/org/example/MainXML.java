@@ -61,7 +61,6 @@ public class MainXML {
             System.out.println("Guardando datos antes de salir...");
         }));
 
-        //TODO REVISAR PORQUE NO SIRVE EL 5 O 0 PARA SALIR DEL MENU
         int opcion, opcionSub;
         do{
             showMenu();
@@ -83,7 +82,6 @@ public class MainXML {
                         }
                     }while (opcionSub != 0);
                 }
-                //TODO CARGAR LOS DATOS DE ORCAR
                 case 2 -> {
                     typeMenu = "registerEmployee.xml";
                     cargarMenuDesdeXML(typeMenu);
@@ -173,8 +171,6 @@ public class MainXML {
             System.out.println("Error al cargar el menú desde el archivo XML.");
         }
     }
-
-    ////////////////////
 
     /**
      * Carga y muestra el menú de opciones desde un archivo XML. El método lee
@@ -277,7 +273,6 @@ public class MainXML {
 
     private static void registrarEmpresa() {
         System.out.println("=== Registrar Empresa ===");
-
         // Declaración de variables para almacenar los datos del país
         String nombre_empresa = null;
         String codigo_empresa = null;
@@ -839,6 +834,217 @@ public class MainXML {
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    private static void registrarEmpleados() {
+        System.out.println("=== Registrar Empleado ===");
+
+        // Verificar si hay personas registradas
+        if (personList.isEmpty()) {
+            System.out.println("No hay personas registradas. Registre al menos una persona antes de crear un empleado.");
+            return;
+        }
+
+        System.out.println("Personas registradas:");
+        for (int i = 0; i < personList.size(); i++) {
+            System.out.println((i + 1) + ". " + personList.get(i).getNombre_apellido_persona());
+        }
+
+        // Obtener la selección de la persona asociada al cargo
+        System.out.print("Seleccione una persona de la lista (1-" + personList.size() + "): ");
+        int opcionPersona = leerIndicePersona();
+
+        // Validar la selección de persona
+        if (opcionPersona < 1 || opcionPersona > personList.size()) {
+            System.out.println("Selección de persona no válida. Por favor, seleccione una persona válida.");
+            return;
+        }
+
+        // Obtener la persona seleccionada
+        Person personaSeleccionada = personList.get(opcionPersona - 1);
+
+        // Verificar si ya existe un empleado con el mismo cargo
+        TypeJob cargoSeleccionado = TypeJob.valueOf(jobTitles());
+        boolean empleadoExistente = false;
+
+        for (Employee empleado : employeeList) {
+            if (empleado.getTypeJob() == cargoSeleccionado) {
+                empleado.getLista_personas_cargo().add(personaSeleccionada);
+                System.out.println("Persona registrada exitosamente como empleado.");
+                guardarEmpleadosEnArchivo_json();
+                empleadoExistente = true;
+                break; // Salir del bucle una vez que la persona haya sido asociada al cargo.
+            }
+        }
+
+        // Si no existe un empleado con el mismo cargo, se crea uno nuevo
+        if (!empleadoExistente) {
+            Employee nuevoEmpleado = new Employee(cargoSeleccionado, new ArrayList<>());
+            nuevoEmpleado.getLista_personas_cargo().add(personaSeleccionada);
+            employeeList.add(nuevoEmpleado);
+            System.out.println("Empleado registrado exitosamente.");
+            System.out.println(employeeList.size());
+            guardarEmpleadosEnArchivo_json();
+        }
+    }
+    private static void verEmpleadosRegistrados () {
+        System.out.println("=== Empleados Registrados ===");
+
+        // Verificar si hay empleados registrados
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+
+        // Recorrer la lista de empleados y mostrar sus detalles
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee empleado = employeeList.get(i);
+            System.out.println("Empleado :");
+            System.out.println("Cargo: " + empleado.getTypeJob());
+
+            List<Person> personasAsociadas = empleado.getLista_personas_cargo();
+            System.out.println("Personas asociadas al cargo:");
+            for (int j = 0; j < personasAsociadas.size(); j++) {
+                Person persona = personasAsociadas.get(j);
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+            }
+
+            System.out.println();
+        }
+    }
+
+
+    private static void modificarEmpleado () {
+        System.out.println("=== Modificar Empleado ===");
+
+        for (int i = 0; i < employeeList.size(); i++) {
+            Employee empleado = employeeList.get(i);
+            System.out.println("Empleado :");
+            System.out.println("Cargo: " + empleado.getTypeJob());
+
+            List<Person> personasAsociadas = empleado.getLista_personas_cargo();
+            System.out.println("Personas asociadas al cargo:");
+            for (int j = 0; j < personasAsociadas.size(); j++) {
+                Person persona = personasAsociadas.get(j);
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+            }
+            System.out.println();
+        }
+
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+
+        System.out.print("Ingrese el índice del empleado que desea modificar: ");
+        int indiceSeleccionado = leerIndiceValido(personList.size());
+        System.out.println(indiceSeleccionado);
+        System.out.println(employeeList.size());
+        // Verificar que el índice esté dentro del rango válido
+        if (indiceSeleccionado >= 0 && indiceSeleccionado < employeeList.size()) {
+            Employee empleadoAModificar = employeeList.get(indiceSeleccionado);
+
+            System.out.println("Empleado seleccionado:");
+            System.out.println("Cargo actual: " + empleadoAModificar.getTypeJob());
+            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+
+            System.out.print("Nuevo cargo: ");
+            String nuevoCargo = leerCadenaNoVaciaTexto();
+            if (!nuevoCargo.isEmpty()) {
+                empleadoAModificar.setTypeJob(TypeJob.valueOf(nuevoCargo));
+            }
+
+            System.out.println("Empleado modificado exitosamente.");
+
+            // Llamar a la función para guardar los empleados en un archivo JSON después de la modificación
+            guardarEmpleadosEnArchivo_json();
+        } else {
+            System.out.println("Índice no válido. No se realizó ninguna modificación.");
+        }
+    }
+
+    private static void eliminarEmpleado() {
+        System.out.println("=== Eliminar Registro de empleados ===");
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay sedes registradas.");
+            return;
+        }
+        verEmpleadosRegistrados();
+        System.out.print("Ingrese el índice de la sede que desea eliminar: ");
+        int indice = leerIndiceValido(employeeList.size());
+        employeeList.remove(indice);
+        System.out.println("empleado eliminado exitosamente.");
+        guardarEmpleadosEnArchivo_json();
+    }
+
+    private static void asociarPersonEmployee() {
+        cargarEmpleadosDesdeArchivo_json(); // Cargar las empresa registradas desde el archivo JSON
+
+        System.out.println("=== ASOCIAR Persona A Empleado===");
+
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+        ver_personas_registradas();
+        System.out.print("Ingrese el índice de la persona que desea asociar al empleado: ");
+        int indicePersona = leerIndiceValido(personList.size());
+
+        Employee EmpleadoSeleccionado = employeeList.get(indicePersona);
+        //TODO TERMINAR ESTE METODO
+        // Verificar si la persona ya está asociada como empleado
+        for (Employee employee : employeeList) {
+            for (Person person : employee.getLista_personas_cargo()) {
+                if (person.getId_persona().equals(EmpleadoSeleccionado.getLista_personas_cargo().get(indicePersona).getId_persona())) {
+                    System.out.println("La persona ya está asociado como empleado.");
+                    return;
+                }
+            }
+        }
+
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay Personas registradas.");
+            return;
+        }
+        verEmpleadosRegistrados();
+
+        System.out.print("Ingrese el índice del empleado para la que desea asociar a la personas¿: ");
+        int indiceEmployee = leerIndiceValido(companyList.size());
+
+        Employee empresaSeleccionada = employeeList.get(indiceEmployee);
+
+        // Verificar si la persona ya está asociada como empleado seleccionada
+        for (Person person : empresaSeleccionada.getLista_personas_cargo()) {
+            if (person.getId_persona().equals(EmpleadoSeleccionado.getLista_personas_cargo().get(indiceEmployee).getId_persona())) {
+                System.out.println("La sede ya está asociada a la empresa.");
+                return;
+            }
+        }
+
+        empresaSeleccionada.getLista_sedes_empresa().add(sedeSeleccionada);
+        System.out.println("Sede asociada exitosamente a la Empresa");
+        guardarEmpresasEnArchivo_json();
+    }
+
+    public static String jobTitles () {
+        System.out.println("=== CARGOS DISPONIBLES ===\n1. " + TypeJob.DIRECTIVO + "(D)" + "\n2. " + TypeJob.ASISTENCIAL + "(A)" + "\n3. " + TypeJob.OPERATIVO + "(O)" +
+                "\nIngrese el número del cargo en el que desea registrar a la persona: ");
+        int indexJobTitle = leerIndiceValido(TypeJob.values().length);
+        String jobTitle = "";
+        switch (indexJobTitle) {
+            case 1 -> jobTitle = String.valueOf(TypeJob.DIRECTIVO);
+            case 2 -> jobTitle = String.valueOf(TypeJob.OPERATIVO);
+            case 3 -> jobTitle = String.valueOf(TypeJob.ASISTENCIAL);
+            default -> System.out.println("Por favor ingrese un valor valido (1, 2, 3)");
+        }
+        return jobTitle;
+    }
+
+>>>>>>> Stashed changes
 
     /*private static void mostrarMenu() {                         // mostrar opciones menú
         System.out.println("=== MENÚ - REGISTRO DE PERSONAS EN/ES===");
