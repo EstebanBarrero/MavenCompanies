@@ -1,6 +1,5 @@
 [ {
-  "employeeLeader" : false,
-  "idPersona" : "023",
-  "nombreApellidoPersona" : "DAVID ESTEBAN",
-  "isEmployeeLeader" : false
+  "isEmployeeLeader" : false,
+  "idPersona" : "05",
+  "nombreApellidoPersona" : "ESTEBAN BARRERO"
 } ]

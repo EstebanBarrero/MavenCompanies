@@ -8,17 +8,16 @@ public class Person {
     String idPersona;
     @JsonProperty("nombreApellidoPersona")
     String nombreApellidoPersona;
-    @JsonProperty("isEmployeeLeader")
     private Boolean isEmployeeLeader;
 
-    //constructor vacío
+    // Constructor vacío
     public Person() {
     }
 
-    public Person(String idPersona, String nombreApellidoPersona, Boolean empleado_jefe) {
+    public Person(String idPersona, String nombreApellidoPersona, Boolean isEmployeeLeader) {
         this.idPersona = idPersona;
         this.nombreApellidoPersona = nombreApellidoPersona;
-        this.isEmployeeLeader = empleado_jefe;
+        this.isEmployeeLeader = isEmployeeLeader;
     }
 
     public String getIdPersona() {
@@ -37,12 +36,14 @@ public class Person {
         this.nombreApellidoPersona = nombreApellidoPersona;
     }
 
-    public Boolean getEmployeeLeader() {
+    // Getters y setters para isEmployeeLeader
+
+    public Boolean getIsEmployeeLeader() {
         return isEmployeeLeader;
     }
 
-    public void setEmployeeLeader(Boolean employeeLeader) {
-        isEmployeeLeader = employeeLeader;
+    public void setIsEmployeeLeader(Boolean isEmployeeLeader) {
+        this.isEmployeeLeader = isEmployeeLeader;
     }
 
     @Override
@@ -52,3 +53,4 @@ public class Person {
                 + ", Empleado jefe (S/N): " + isEmployeeLeader;
     }
 }
+

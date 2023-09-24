@@ -75,7 +75,7 @@ public class MainXML {
                         opcionSub = leerOpcion();
                         switch (opcionSub) {
                             case 1 -> ver_personas_registradas(); //Ver personas registradas
-                            case 2 -> registrar_Persona();  //Registrar_Persona
+                            case 2 -> registrarPersona();  //Registrar_Persona
                             case 3 -> modificar_Persona();//Modificar_Persona
                             case 4 -> eliminar_Persona(); //Eliminar_Persona
                             case 0 -> view.showBye();
@@ -799,7 +799,6 @@ public class MainXML {
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             Path filePath = Paths.get("persona.json");
-
             // Utiliza writerWithDefaultPrettyPrinter() para formatear el JSON con saltos de línea y sangría
             // Luego, se escribe la lista de sedes en el archivo JSON.
             objectMapper.writerWithDefaultPrettyPrinter().writeValue(filePath.toFile(), personList);
@@ -911,7 +910,7 @@ public class MainXML {
                 Person persona = personasAsociadas.get(j);
                 System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
                 System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getIsEmployeeLeader());
             }
 
             System.out.println();
@@ -944,7 +943,7 @@ public class MainXML {
                 Person persona = personasAsociadas.get(j);
                 System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
                 System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getIsEmployeeLeader());
             }
             System.out.println();
         }
@@ -994,7 +993,7 @@ public class MainXML {
                 Person persona = personasAsociadas.get(j);
                 System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
                 System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getIsEmployeeLeader());
             }
             System.out.println();
         }
@@ -1175,30 +1174,81 @@ public class MainXML {
                     }
                 }
             }
+    private static void registrarPersona() {
+        System.out.println("=== Registrar Persona ===");
 
-            private static void registrar_Persona () {
+        // Ciclo para validar y registrar los datos de la persona
+        while (true) {
+            // Declaración de variables para almacenar los datos de la persona
+            String idPersona = null;
+            String nombrePersona = null;
+            Boolean isEmployeeLeader = false;
+
+            if (nombrePersona == null) {
+                System.out.print("Nombre y apellido persona: ");
+                nombrePersona = leerCadenaNoVaciaTexto().toUpperCase();
+            } else {
+                System.out.println("Por favor ingrese el nombre y apellido");
+            }
+            if (idPersona == null) {
+                System.out.print("Número ID persona: ");
+                idPersona = leerCodigoNumerico();
+
+                // Validar si la persona ya está registrada por id
+                boolean idRepetido = false;
+                for (Person persona : personList) {
+                    if (persona.getIdPersona().equals(idPersona)) {
+                        System.out.println("La persona con este id ya está registrada.");
+                        idPersona = null; // Reiniciar para volver a pedir el dato
+                        idRepetido = true;
+                        break;
+                    }
+                }
+                if (idRepetido) {
+                    continue; // Volver al inicio del ciclo si el id está repetido
+                }
+            }
+
+            // Si se han ingresado todos los datos requeridos, registrar la persona
+            if (nombrePersona != null && idPersona != null) {
+                personList.add(new Person(idPersona, nombrePersona, isEmployeeLeader));
+                //personList.add(new Person(id_persona, nombrePersona, isEmployeeLeader));
+                System.out.println("Persona registrada exitosamente.");
+
+                // Llamar a la función para guardar las personas en un archivo JSON
+                guardarPersonasEnArchivo_json();
+                guardarPersonasEnArchivo_xml();
+                break; // Salir del bucle en caso de éxito
+            }
+        }
+    }
+
+            /*private static void registrarPersona() {
                 System.out.println("=== Registrar Persona ===");
 
                 // Declaración de variables para almacenar los datos de la persona
-                String nombre_persona = null;
+                String idPersona = null;
+                String nombrePersona = null;
                 Boolean isEmployeeLeader = false;
-                String id_persona = null;
 
                 // Ciclo para validar y registrar los datos de la persona
                 while (true) {
-                    if (nombre_persona == null) {
-                        System.out.print("Nombre persona: ");
-                        nombre_persona = leerCadenaNoVaciaTexto().toUpperCase();
-                    } else if (id_persona == null) {
+                    if (nombrePersona == null) {
+                        System.out.print("Nombre y apellido persona: ");
+                        nombrePersona = leerCadenaNoVaciaTexto().toUpperCase();
+                    }else {
+                        System.out.println("Por favor ingrese el nombre y apellido");
+                    }
+                    if (idPersona == null) {
                         System.out.print("Número ID persona: ");
-                        id_persona = leerCodigoNumerico();
+                        idPersona = leerCodigoNumerico();
 
                         // Validar si la persona ya está registrada por id
                         boolean idRepetido = false;
                         for (Person persona : personList) {
-                            if (persona.getIdPersona().equals(id_persona)) {
+                            if (persona.getIdPersona().equals(idPersona)) {
                                 System.out.println("La persona con este id ya está registrada.");
-                                id_persona = null; // Reiniciar para volver a pedir el dato
+                                idPersona = null; // Reiniciar para volver a pedir el dato
                                 idRepetido = true;
                                 break;
                             }
@@ -1209,8 +1259,9 @@ public class MainXML {
                     }
 
                     // Si se han ingresado todos los datos requeridos, registrar la persona
-                    if (nombre_persona != null && id_persona != null) {
-                        personList.add(new Person(id_persona, nombre_persona, isEmployeeLeader));
+                    if (nombrePersona != null && idPersona != null) {
+                        personList.add(new Person(idPersona, nombrePersona, isEmployeeLeader));
+                        //personList.add(new Person(id_persona, nombrePersona, isEmployeeLeader));
                         System.out.println("Persona registrada exitosamente.");
 
                         // Llamar a la función para guardar las personas en un archivo JSON
@@ -1219,7 +1270,7 @@ public class MainXML {
                         break; // Salir del bucle en caso de éxito
                     }
                 }
-            }
+            }*/
 
             private static void ver_personas_registradas () {
                 System.out.println("=== Personas Registradas ===");
