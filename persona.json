@@ -10,4 +10,9 @@
   "id_persona" : "31321",
   "nombre_apellido_persona" : "DAVID",
   "empleado_jefe" : "JIMENEX"
+
+  "employeeLeader" : false,
+  "idPersona" : "023",
+  "nombreApellidoPersona" : "DAVID ESTEBAN",
+  "isEmployeeLeader" : false
 } ]

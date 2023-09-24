@@ -1,4 +1,5 @@
 [ {
+
   "cargo" : "ASISTENCIAL",
   "lista_personas_cargo" : [ {
     "id_persona" : "11111111",
@@ -15,5 +16,29 @@
     "id_persona" : "31321",
     "nombre_apellido_persona" : "DAVID",
     "empleado_jefe" : "JIMENEX"
+  } ]
+}, {
+  "cargo" : "DIRECTIVO",
+  "lista_personas_cargo" : [ {
+    "employeeLeader" : false,
+    "idPersona" : "100",
+    "nombreApellidoPersona" : "ESTEBA",
+    "isEmployeeLeader" : false
+  } ]
+}, {
+  "cargo" : "ASISTENCIAL",
+  "lista_personas_cargo" : [ {
+    "employeeLeader" : false,
+    "idPersona" : "100",
+    "nombreApellidoPersona" : "ESTEBA",
+    "isEmployeeLeader" : false
+  } ]
+}, {
+  "cargo" : "OPERATIVO",
+  "lista_personas_cargo" : [ {
+    "employeeLeader" : false,
+    "idPersona" : "100",
+    "nombreApellidoPersona" : "ESTEBA",
+    "isEmployeeLeader" : false
   } ]
 } ]

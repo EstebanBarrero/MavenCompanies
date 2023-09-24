@@ -62,7 +62,6 @@ public class MainXML {
             System.out.println("Guardando datos antes de salir...");
         }));
 
-        //TODO REVISAR PORQUE NO SIRVE EL 5 O 0 PARA SALIR DEL MENU
         int opcion, opcionSub;
         do{
             showMenu();
@@ -826,7 +825,7 @@ public class MainXML {
                     // Verificamos si la persona ya existe en la lista actual.
                     boolean existe = false;
                     for (Person d : personList) {
-                        if (d.getId_persona().equals(persona.getId_persona())) {
+                        if (d.getIdPersona().equals(persona.getIdPersona())) {
                             existe = true;
                             break;
                         }
@@ -851,11 +850,8 @@ public class MainXML {
             System.out.println("No hay personas registradas. Registre al menos una persona antes de crear un empleado.");
             return;
         }
-
-        System.out.println("Personas registradas:");
-        for (int i = 0; i < personList.size(); i++) {
-            System.out.println((i + 1) + ". " + personList.get(i).getNombre_apellido_persona());
-        }
+        //TODO HACER QUE VALIDE QUE UNA PESONA SOLO PUEDE TENER UN CARGO
+        ver_personas_registradas();
 
         // Obtener la selección de la persona asociada al cargo
         System.out.print("Seleccione una persona de la lista (1-" + personList.size() + "): ");
@@ -913,9 +909,9 @@ public class MainXML {
             System.out.println("Personas asociadas al cargo:");
             for (int j = 0; j < personasAsociadas.size(); j++) {
                 Person persona = personasAsociadas.get(j);
-                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
-                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
             }
 
             System.out.println();
@@ -946,9 +942,9 @@ public class MainXML {
             System.out.println("Personas asociadas al cargo:");
             for (int j = 0; j < personasAsociadas.size(); j++) {
                 Person persona = personasAsociadas.get(j);
-                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
-                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
             }
             System.out.println();
         }
@@ -968,7 +964,7 @@ public class MainXML {
 
             System.out.println("Empleado seleccionado:");
             System.out.println("Cargo actual: " + empleadoAModificar.getTypeJob());
-            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombreApellidoPersona());
 
             System.out.print("Nuevo cargo: ");
             String nuevoCargo = leerCadenaNoVaciaTexto();
@@ -996,9 +992,9 @@ public class MainXML {
             System.out.println("Personas asociadas al cargo:");
             for (int j = 0; j < personasAsociadas.size(); j++) {
                 Person persona = personasAsociadas.get(j);
-                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getId_persona());
-                System.out.println("     Nombre y Apellido: " + persona.getNombre_apellido_persona());
-                System.out.println("     Empleado Jefe (S/N): " + persona.getEmpleado_jefe());
+                System.out.println("  " + (j + 1) + ". ID Persona: " + persona.getIdPersona());
+                System.out.println("     Nombre y Apellido: " + persona.getNombreApellidoPersona());
+                System.out.println("     Empleado Jefe (S/N): " + persona.getEmployeeLeader());
             }
             System.out.println();
         }
@@ -1016,7 +1012,7 @@ public class MainXML {
             Employee empleadoAModificar = employeeList.get(indiceSeleccionado);
 
             System.out.println("Cargo actual seleccionado: " + empleadoAModificar.getTypeJob());
-            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombre_apellido_persona());
+            System.out.println("Nombre del empleado actual: " + empleadoAModificar.getLista_personas_cargo().get(0).getNombreApellidoPersona());
 
             System.out.print("Nuevo cargo: ");
             String nuevoCargo = leerCadenaNoVaciaTexto();
@@ -1059,7 +1055,7 @@ public class MainXML {
         System.out.println("Personas asociadas a empleado" + empleadoSeleccionado.getLista_personas_cargo() + ":");
         for (int i = 0; i < empleadoSeleccionado.getLista_personas_cargo().size(); i++) {
             Person person = empleadoSeleccionado.getLista_personas_cargo().get(i);
-            System.out.println(i + ": " + person.getNombre_apellido_persona());
+            System.out.println(i + ": " + person.getNombreApellidoPersona());
         }
 
         System.out.print("Ingrese el índice de la persona que desea desasociar de empleados: ");
@@ -1090,12 +1086,12 @@ public class MainXML {
     public static String jobTitles () {
         System.out.println("=== CARGOS DISPONIBLES ===\n1. " + TypeJob.DIRECTIVO + "(D)" + "\n2. " + TypeJob.ASISTENCIAL + "(A)" + "\n3. " + TypeJob.OPERATIVO + "(O)" +
                 "\nIngrese el número del cargo en el que desea registrar a la persona: ");
-        int indexJobTitle = leerIndiceValido(TypeJob.values().length);
+        int indexJobTitle = leerIndiceValido(TypeJob.values().length + 1);
         String jobTitle = "";
         switch (indexJobTitle) {
             case 1 -> jobTitle = String.valueOf(TypeJob.DIRECTIVO);
-            case 2 -> jobTitle = String.valueOf(TypeJob.OPERATIVO);
-            case 3 -> jobTitle = String.valueOf(TypeJob.ASISTENCIAL);
+            case 2 -> jobTitle = String.valueOf(TypeJob.ASISTENCIAL);
+            case 3 -> jobTitle = String.valueOf(TypeJob.OPERATIVO);
             default -> System.out.println("Por favor ingrese un valor valido (1, 2, 3)");
         }
         return jobTitle;
@@ -1185,39 +1181,36 @@ public class MainXML {
 
                 // Declaración de variables para almacenar los datos de la persona
                 String nombre_persona = null;
-                String apellido_persona = null;
+                Boolean isEmployeeLeader = false;
                 String id_persona = null;
 
                 // Ciclo para validar y registrar los datos de la persona
                 while (true) {
-                    if (nombre_persona == null && apellido_persona == null) {
+                    if (nombre_persona == null) {
                         System.out.print("Nombre persona: ");
                         nombre_persona = leerCadenaNoVaciaTexto().toUpperCase();
-                        System.out.print("Apellido persona: ");
-                        apellido_persona = leerCadenaNoVaciaTexto().toUpperCase();
                     } else if (id_persona == null) {
-                        System.out.print("Número identificación persona: ");
+                        System.out.print("Número ID persona: ");
                         id_persona = leerCodigoNumerico();
 
                         // Validar si la persona ya está registrada por id
                         boolean idRepetido = false;
                         for (Person persona : personList) {
-                            if (persona.getId_persona().equals(id_persona)) {
+                            if (persona.getIdPersona().equals(id_persona)) {
                                 System.out.println("La persona con este id ya está registrada.");
                                 id_persona = null; // Reiniciar para volver a pedir el dato
                                 idRepetido = true;
                                 break;
                             }
                         }
-
                         if (idRepetido) {
                             continue; // Volver al inicio del ciclo si el id está repetido
                         }
                     }
 
                     // Si se han ingresado todos los datos requeridos, registrar la persona
-                    if (nombre_persona != null && apellido_persona != null && id_persona != null) {
-                        personList.add(new Person(id_persona, nombre_persona, apellido_persona));
+                    if (nombre_persona != null && id_persona != null) {
+                        personList.add(new Person(id_persona, nombre_persona, isEmployeeLeader));
                         System.out.println("Persona registrada exitosamente.");
 
                         // Llamar a la función para guardar las personas en un archivo JSON
@@ -1250,8 +1243,8 @@ public class MainXML {
         for (int i = 0; i < personList.size(); i++) {
             Person persona = personList.get(i);
             System.out.println("Índice: " + i);
-            System.out.println("ID: " + persona.getId_persona());
-            System.out.println("Nombre: " + persona.getNombre_apellido_persona());
+            System.out.println("ID: " + persona.getIdPersona());
+            System.out.println("Nombre: " + persona.getNombreApellidoPersona());
             //System.out.println("Apellido: " + persona.getApellidos());
             System.out.println();
         }
@@ -1269,14 +1262,14 @@ public class MainXML {
             Person personaAModificar = personList.get(indiceSeleccionado);
 
             System.out.println("Persona seleccionada:");
-            System.out.println("ID: " + personaAModificar.getId_persona());
-            System.out.println("Nombre actual: " + personaAModificar.getNombre_apellido_persona());
+            System.out.println("ID: " + personaAModificar.getIdPersona());
+            System.out.println("Nombre actual: " + personaAModificar.getNombreApellidoPersona());
             //System.out.println("Apellido actual: " + personaAModificar.getApellidos());
 
             System.out.print("Nuevo nombre: ");
             String nuevoNombre = leerCadenaNoVaciaTexto();
             if (!nuevoNombre.isEmpty()) {
-                personaAModificar.setNombre_apellido_persona(nuevoNombre.toUpperCase());
+                personaAModificar.setNombreApellidoPersona(nuevoNombre.toUpperCase());
             }
 
             /*System.out.print("Nuevo apellido: ");
@@ -1341,11 +1334,11 @@ public class MainXML {
 
 // Crear elementos para ID, Nombre y Apellido de la persona
                         Element idElement = doc.createElement("ID");
-                        idElement.appendChild(doc.createTextNode(persona.getId_persona()));
+                        idElement.appendChild(doc.createTextNode(persona.getIdPersona()));
                         personaElement.appendChild(idElement);
 
                         Element nombreElement = doc.createElement("Nombre");
-                        nombreElement.appendChild(doc.createTextNode(persona.getNombre_apellido_persona()));
+                        nombreElement.appendChild(doc.createTextNode(persona.getNombreApellidoPersona()));
                         personaElement.appendChild(nombreElement);
 
                         /*Element apellidoElement = doc.createElement("Apellido");
