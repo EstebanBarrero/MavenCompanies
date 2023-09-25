@@ -1,5 +1,17 @@
 [ {
   "isEmployeeLeader" : false,
   "idPersona" : "01",
-  "nombreApellidoPersona" : "DAVID ESTEBAN PUENTES BARRERO"
+  "nombreApellidoPersona" : "ESTEBAN BARRERO"
+}, {
+  "isEmployeeLeader" : false,
+  "idPersona" : "02",
+  "nombreApellidoPersona" : "DAVID PUENTES"
+}, {
+  "isEmployeeLeader" : false,
+  "idPersona" : "023",
+  "nombreApellidoPersona" : "JUAN"
+}, {
+  "isEmployeeLeader" : false,
+  "idPersona" : "20",
+  "nombreApellidoPersona" : "DIEGO BARRERO"
 } ]

@@ -1,28 +1,30 @@
 [ {
-  "nombre_sede" : "SUR",
-  "codigo_sede" : "02",
-  "sede_principal" : "N",
+  "nombre_sede" : "CENTRO",
+  "codigo_sede" : "01",
+  "sede_principal" : "S",
   "lista_empleados_sede" : [ {
-    "cargo" : "DIRECTIVO",
+    "cargo" : "OPERATIVO",
     "lista_personas_cargo" : [ {
       "isEmployeeLeader" : false,
-      "idPersona" : "05",
+      "idPersona" : "01",
       "nombreApellidoPersona" : "ESTEBAN BARRERO"
     } ]
   } ]
 }, {
   "nombre_sede" : "NORTE",
-  "codigo_sede" : "05",
+  "codigo_sede" : "02",
   "sede_principal" : "N",
   "lista_empleados_sede" : [ ]
 }, {
-  "nombre_sede" : "POLO",
-  "codigo_sede" : "50",
+  "nombre_sede" : "GREEN HILLS",
+  "codigo_sede" : "03",
   "sede_principal" : "N",
-  "lista_empleados_sede" : [ ]
-}, {
-  "nombre_sede" : "SURNORTE",
-  "codigo_sede" : "09",
-  "sede_principal" : "N",
-  "lista_empleados_sede" : [ ]
+  "lista_empleados_sede" : [ {
+    "cargo" : "DIRECTIVO",
+    "lista_personas_cargo" : [ {
+      "isEmployeeLeader" : false,
+      "idPersona" : "01",
+      "nombreApellidoPersona" : "ESTEBAN BARRERO"
+    } ]
+  } ]
 } ]

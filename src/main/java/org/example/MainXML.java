@@ -93,6 +93,7 @@ public class MainXML {
                             case 3 -> modificarEmpleado();//Modificar_Persona
                             case 4 -> desasociarEmpleadoPersona();
                             case 5 -> eliminarEmpleado(); //Eliminar_Persona
+                            case 6 -> modificarCargo();
                             case 0 -> view.showBye();
                             default -> view.messageNotValidated();
                         }
@@ -1051,6 +1052,13 @@ public class MainXML {
             if (!nuevoCargo.isEmpty()) {
                 empleadoAModificar.setTypeJob(TypeJob.valueOf(nuevoCargo));
             }
+            try {
+                System.out.print("Empleado jefe: \nIngrese true or false");
+                boolean leader = Boolean.parseBoolean(reader.readLine());
+                empleadoAModificar.getLista_personas_cargo().get(indiceSeleccionado).setIsEmployeeLeader(leader);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
 
             System.out.println("Cargo de los empleados modificado exitosamente.");
 
@@ -1162,6 +1170,7 @@ public class MainXML {
         System.out.println("empleado eliminado exitosamente.");
         guardarEmpleadosEnArchivo_json();
     }
+
 
     public static String jobTitles () {
         System.out.println("=== CARGOS DISPONIBLES ===\n1. " + TypeJob.DIRECTIVO + "(D)" + "\n2. " + TypeJob.ASISTENCIAL + "(A)" + "\n3. " + TypeJob.OPERATIVO + "(O)" +

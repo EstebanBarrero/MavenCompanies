@@ -2,6 +2,18 @@
 <Personas>
     <Persona>
         <ID>01</ID>
-        <Nombre>DAVID ESTEBAN PUENTES BARRERO</Nombre>
+        <Nombre>ESTEBAN BARRERO</Nombre>
+    </Persona>
+    <Persona>
+        <ID>02</ID>
+        <Nombre>DAVID PUENTES</Nombre>
+    </Persona>
+    <Persona>
+        <ID>023</ID>
+        <Nombre>JUAN</Nombre>
+    </Persona>
+    <Persona>
+        <ID>20</ID>
+        <Nombre>DIEGO BARRERO</Nombre>
     </Persona>
 </Personas>
