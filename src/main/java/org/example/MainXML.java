@@ -82,7 +82,6 @@ public class MainXML {
                         }
                     }while (opcionSub != 0);
                 }
-                //TODO CARGAR LOS DATOS DE ORCAR
                 case 2 -> {
                     do{
                         typeMenu = "registerEmployee.xml";
@@ -109,6 +108,7 @@ public class MainXML {
                             case 2 -> registrarSede();  //Registrar_Persona
                             case 3 -> modificar_sede_principal_empresa();//Modificar_Persona
                             case 4 -> eliminarSede(); //Eliminar_Persona
+                            case 5 -> asociarEmployeeCampus();
                             case 0 -> view.showBye();
                             default -> view.messageNotValidated();
                         }
@@ -420,6 +420,8 @@ public class MainXML {
     }
 
     private static void registrarSede() {
+        System.out.println("=== Registrar SEDE ===");
+
         view.campusRegister();
 
         // Declaración de variables para almacenar los datos
@@ -445,7 +447,7 @@ public class MainXML {
                 System.out.print("codigo sede: ");
                 codigo_sede = leerCodigoNumerico();
 
-                // Validar si la sede ya está registrado por código
+                // Validar si la sede ya está registrada por código
                 for (Campus sede : campusList) {
                     if (sede.getCodigo_sede().equals(codigo_sede)) {
                         view.messageCampusRegister();
@@ -478,6 +480,57 @@ public class MainXML {
         System.out.println("sede eliminada exitosamente.");
         guardarSedesEnArchivo_json();
     }
+    private static void asociarEmployeeCampus() {
+        cargarEmpresasDesdeArchivo_json(); // Cargar las empresa registradas desde el archivo JSON
+
+        System.out.println("=== ASOCIAR EMPLEADO A CAMPUS===");
+
+        if (employeeList.isEmpty()) {
+            System.out.println("No hay empleados registrados.");
+            return;
+        }
+        verEmpleadosRegistrados();
+
+        System.out.print("Ingrese el índice del empleado que desea asociar a la sede: ");
+        int indiceEmployee = leerIndiceValido(employeeList.size());
+
+        Employee selectEmployee = employeeList.get(indiceEmployee);
+
+        // Verificar si la sede ya está asociada a alguna empresa
+        for (Campus campus : campusList) {
+            for (Employee employee : campus.getEmployeeList()) {
+                if (employee.getTypeJob().equals(selectEmployee.getTypeJob())) {
+                    System.out.println("El empleado ya está asociado a una Sede.");
+                    return;
+                }
+            }
+        }
+
+        if (campusList.isEmpty()) {
+            System.out.println("No hay Sedes registradas.");
+            return;
+        }
+        verSedesRegistradas();
+
+        System.out.print("Ingrese el índice de la Sede para la que desea asociar el empleado: ");
+        int indiceSede = leerIndiceValido(campusList.size());
+
+        Campus selectCampus = campusList.get(indiceSede);
+
+        // Verificar si la sede ya está asociada a la empresa seleccionada
+        for (Employee employee : selectCampus.getEmployeeList()) {
+            if (employee.getTypeJob().equals(selectEmployee.getTypeJob())) {
+                System.out.println("El Empleado ya está asociada a una Sede.");
+                return;
+            }
+        }
+
+        selectCampus.getEmployeeList().add(selectEmployee);
+        System.out.println("Empleado asociado exitosamente a la sede");
+        guardarSedesEnArchivo_json();
+    }
+
+
 
     //asociar sede a empresa
     private static void asociarSedeEmpresa() {
