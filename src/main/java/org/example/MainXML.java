@@ -7,11 +7,13 @@ import java.io.InputStreamReader; // Importa la clase InputStreamReader, que se 
 import java.nio.file.Files;  // Importa la clase Files de java.nio.file para trabajar con operaciones relacionadas con archivos y directorios.
 import java.nio.file.Paths;  // Importa la clase Paths de java.nio.file para gestionar rutas de archivos y directorios de manera eficiente.
 import java.util.ArrayList;       // Importa la clase ArrayList, que se utiliza para crear listas dinámicas
+import java.util.HashSet;
 import java.util.List;            // Importa la interfaz List, que define el comportamiento de una lista (por ejemplo, ArrayList implementa esta interfaz)
 import java.nio.file.Path;        // Importación necesaria para trabajar con rutas de archivos.
 import com.fasterxml.jackson.core.type.TypeReference;// Importación necesaria para manejar tipos genéricos al deserializar JSON con Jackson.
 import com.fasterxml.jackson.databind.ObjectMapper; // Importación necesaria para utilizar ObjectMapper de Jackson para la deserialización y serialización de JSON.
 import java.io.File; // Importa la clase File, que se utiliza para trabajar con archivos en el sistema de archivos.
+import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException; // Importa la clase ParserConfigurationException, que se utiliza para manejar excepciones relacionadas con la configuración del analizador XML.
 import javax.xml.transform.TransformerException; // Importa la clase TransformerException, que se utiliza para manejar excepciones relacionadas con la transformación de XML.
@@ -841,6 +843,26 @@ public class MainXML {
             System.out.println("No se pudo cargar los datos de personas desde el archivo JSON.");
         }
     }
+
+    private static Set<Person> personasRegistradas = new HashSet<>();
+
+    private static boolean validarRegistroEmpleado(Person persona, TypeJob cargo) {
+        if (personasRegistradas.contains(persona)) {
+            System.out.println("Esta persona ya está registrada en otro cargo.");
+            return false;
+        }
+        for (Employee empleado : employeeList) {
+            if (empleado.getTypeJob() == cargo) {
+                List<Person> personasAsociadas = empleado.getLista_personas_cargo();
+                if (personasAsociadas.contains(persona)) {
+                    System.out.println("Esta persona ya pertenece al cargo seleccionado.");
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private static void registrarEmpleados() {
         System.out.println("=== Registrar Empleado ===");
 
@@ -849,11 +871,11 @@ public class MainXML {
             System.out.println("No hay personas registradas. Registre al menos una persona antes de crear un empleado.");
             return;
         }
-        //TODO HACER QUE VALIDE QUE UNA PESONA SOLO PUEDE TENER UN CARGO
-        ver_personas_registradas();
+
+        ver_personas_registradasFor_Employees();
 
         // Obtener la selección de la persona asociada al cargo
-        System.out.print("Seleccione una persona de la lista (1-" + personList.size() + "): ");
+        System.out.print("Seleccione una persona de la lista (1-" + personList.size()+ "): ");
         int opcionPersona = leerIndicePersona();
 
         // Validar la selección de persona
@@ -864,11 +886,14 @@ public class MainXML {
 
         // Obtener la persona seleccionada
         Person personaSeleccionada = personList.get(opcionPersona - 1);
-
+        personasRegistradas.add(personaSeleccionada);
         // Verificar si ya existe un empleado con el mismo cargo
         TypeJob cargoSeleccionado = TypeJob.valueOf(jobTitles());
         boolean empleadoExistente = false;
 
+        if(validarRegistroEmpleado(personaSeleccionada, cargoSeleccionado) == false){
+            return;
+        }
         for (Employee empleado : employeeList) {
             if (empleado.getTypeJob() == cargoSeleccionado) {
                 empleado.getLista_personas_cargo().add(personaSeleccionada);
@@ -878,6 +903,7 @@ public class MainXML {
                 break; // Salir del bucle una vez que la persona haya sido asociada al cargo.
             }
         }
+
 
         // Si no existe un empleado con el mismo cargo, se crea uno nuevo
         if (!empleadoExistente) {
@@ -889,6 +915,9 @@ public class MainXML {
             guardarEmpleadosEnArchivo_json();
         }
     }
+
+
+
     private static void verEmpleadosRegistrados () {
         System.out.println("=== Empleados Registrados ===");
 
@@ -1286,6 +1315,21 @@ public class MainXML {
                     }
                 }
             }
+
+    private static void ver_personas_registradasFor_Employees () {
+        System.out.println("=== Personas Registradas ===");
+
+        // Verificar si hay personas registradas
+        if (personList.isEmpty()) {
+            System.out.println("No hay personas registradas.");
+        } else {
+            int index = 1;
+            for (Person persona : personList) {
+                System.out.println("Índice " + index + ": " + persona);
+                index++;
+            }
+        }
+    }
 
     private static void modificar_Persona() {
         System.out.println("=== Modificar Persona ===");
