@@ -2,6 +2,7 @@ package models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Campus {
@@ -20,11 +21,11 @@ public class Campus {
     }
 
     // Constructor con parámetros
-    public Campus(String nombre_sede, String codigo_sede, String sede_principal, List<Employee> employeeList) {
+    public Campus(String nombre_sede, String codigo_sede, String sede_principal) {
         this.nombre_sede = nombre_sede;
         this.codigo_sede = codigo_sede;
         this.sede_principal = sede_principal;
-        this.employeeList = employeeList;
+        this.employeeList = new ArrayList<>();
     }
 
     public String getNombre_sede() {

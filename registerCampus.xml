@@ -5,4 +5,5 @@
     <option id="2">Registrar Sede</option>
     <option id="3">Modificar Sede</option>
     <option id="4">Eliminar Sede</option>
+    <option id="5">Asociar Empleado a Sede</option>
 </menu>
