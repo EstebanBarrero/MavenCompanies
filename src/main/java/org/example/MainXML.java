@@ -841,20 +841,25 @@ public class MainXML {
         }
     }
 
-    private static Set<Person> personasRegistradas = new HashSet<>();
-    private static Map<Person, TypeJob> personasYCargos = new HashMap<>();
 
 
     private static boolean validarRegistroEmpleado(Person persona, TypeJob cargo) {
-        if (personasRegistradas.contains(persona)) {
-            TypeJob cargoActual = personasYCargos.get(persona);
-            if (cargoActual != null) {
-                System.out.println("Esta persona ya está registrada en el cargo '" + cargoActual + "'.");
+        for (Employee empleado : employeeList) {
+            if (empleado.getTypeJob() == cargo) {
+                System.out.println("Esta persona ya pertenece al cargo seleccionado.");
+                return false;// No se permite el registro.
             }
-            return false;
+        }
+            for (Employee empleado: employeeList) {
+            if (empleado.getTypeJob() != null) {
+                System.out.println("El empleado pertenece a otro cargo");
+                return false;
+            }
         }
         return true;
     }
+
+
 
     private static void registrarEmpleados() {
         System.out.println("=== Registrar Empleado ===");
@@ -879,14 +884,12 @@ public class MainXML {
 
         // Obtener la persona seleccionada
         Person personaSeleccionada = personList.get(opcionPersona - 1);
-        personasRegistradas.add(personaSeleccionada);
         // Después de agregar el empleado exitosamente
 
 
         // Verificar si ya existe un empleado con el mismo cargo
         TypeJob cargoSeleccionado = TypeJob.valueOf(jobTitles());
         boolean empleadoExistente = false;
-        personasYCargos.put(personaSeleccionada, cargoSeleccionado);
         if(validarRegistroEmpleado(personaSeleccionada, cargoSeleccionado) == false){
             return;
         }
