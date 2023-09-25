@@ -6,14 +6,11 @@ import java.io.IOException;       // Importa la clase IOException, que se utiliz
 import java.io.InputStreamReader; // Importa la clase InputStreamReader, que se utiliza para leer caracteres desde un flujo de entrada
 import java.nio.file.Files;  // Importa la clase Files de java.nio.file para trabajar con operaciones relacionadas con archivos y directorios.
 import java.nio.file.Paths;  // Importa la clase Paths de java.nio.file para gestionar rutas de archivos y directorios de manera eficiente.
-import java.util.ArrayList;       // Importa la clase ArrayList, que se utiliza para crear listas dinámicas
-import java.util.HashSet;
-import java.util.List;            // Importa la interfaz List, que define el comportamiento de una lista (por ejemplo, ArrayList implementa esta interfaz)
+import java.util.*;
 import java.nio.file.Path;        // Importación necesaria para trabajar con rutas de archivos.
 import com.fasterxml.jackson.core.type.TypeReference;// Importación necesaria para manejar tipos genéricos al deserializar JSON con Jackson.
 import com.fasterxml.jackson.databind.ObjectMapper; // Importación necesaria para utilizar ObjectMapper de Jackson para la deserialización y serialización de JSON.
 import java.io.File; // Importa la clase File, que se utiliza para trabajar con archivos en el sistema de archivos.
-import java.util.Set;
 
 import javax.xml.parsers.ParserConfigurationException; // Importa la clase ParserConfigurationException, que se utiliza para manejar excepciones relacionadas con la configuración del analizador XML.
 import javax.xml.transform.TransformerException; // Importa la clase TransformerException, que se utiliza para manejar excepciones relacionadas con la transformación de XML.
@@ -845,20 +842,16 @@ public class MainXML {
     }
 
     private static Set<Person> personasRegistradas = new HashSet<>();
+    private static Map<Person, TypeJob> personasYCargos = new HashMap<>();
+
 
     private static boolean validarRegistroEmpleado(Person persona, TypeJob cargo) {
         if (personasRegistradas.contains(persona)) {
-            System.out.println("Esta persona ya está registrada en otro cargo.");
-            return false;
-        }
-        for (Employee empleado : employeeList) {
-            if (empleado.getTypeJob() == cargo) {
-                List<Person> personasAsociadas = empleado.getLista_personas_cargo();
-                if (personasAsociadas.contains(persona)) {
-                    System.out.println("Esta persona ya pertenece al cargo seleccionado.");
-                    return false;
-                }
+            TypeJob cargoActual = personasYCargos.get(persona);
+            if (cargoActual != null) {
+                System.out.println("Esta persona ya está registrada en el cargo '" + cargoActual + "'.");
             }
+            return false;
         }
         return true;
     }
@@ -887,10 +880,13 @@ public class MainXML {
         // Obtener la persona seleccionada
         Person personaSeleccionada = personList.get(opcionPersona - 1);
         personasRegistradas.add(personaSeleccionada);
+        // Después de agregar el empleado exitosamente
+
+
         // Verificar si ya existe un empleado con el mismo cargo
         TypeJob cargoSeleccionado = TypeJob.valueOf(jobTitles());
         boolean empleadoExistente = false;
-
+        personasYCargos.put(personaSeleccionada, cargoSeleccionado);
         if(validarRegistroEmpleado(personaSeleccionada, cargoSeleccionado) == false){
             return;
         }
