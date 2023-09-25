@@ -1,7 +1,7 @@
 package models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.util.ArrayList;
+
 import java.util.List;
 
 public class Campus {
@@ -13,19 +13,18 @@ public class Campus {
     @JsonProperty("sede_principal")
     String sede_principal;
     @JsonProperty("lista_empleados_sede")
-    List<Employee> lista_empleados_sede;
+    List<Employee> employeeList;
 
     //constructor vacío
     public Campus() {
     }
 
     // Constructor con parámetros
-    public Campus(String nombre_sede, String codigo_sede, String sede_principal) {
+    public Campus(String nombre_sede, String codigo_sede, String sede_principal, List<Employee> employeeList) {
         this.nombre_sede = nombre_sede;
         this.codigo_sede = codigo_sede;
         this.sede_principal = sede_principal;
-
-        this.lista_empleados_sede = new ArrayList<>(); // Inicialización de la lista
+        this.employeeList = employeeList;
     }
 
     public String getNombre_sede() {
@@ -52,23 +51,24 @@ public class Campus {
         this.sede_principal = sede_principal;
     }
 
-    public List<Employee> getLista_empleados_sede() {
-        return lista_empleados_sede;
+    public List<Employee> getEmployeeList() {
+        return employeeList;
     }
 
-    public void setLista_empleados_sede(List<Employee> lista_empleados_sede) {
-        this.lista_empleados_sede = lista_empleados_sede;
+    public void setEmployeeList(List<Employee> employeeList) {
+        this.employeeList = employeeList;
     }
 
     //Getters y setters
     public void Lista_empleados_sede(Employee empleados) {
-        lista_empleados_sede.add(empleados);
+        employeeList.add(empleados);
     }
 
     @Override
     public String toString() {
         return "Nombre Sede: " + nombre_sede
                 + ", Código Sede: " + codigo_sede
-                + ", Sede Principal(S/N): " + sede_principal;
+                + ", Sede Principal(S/N): " + sede_principal
+                + ", Empleados: " + employeeList;
     }
 }
